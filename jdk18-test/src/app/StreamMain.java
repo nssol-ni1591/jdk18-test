@@ -19,30 +19,30 @@ import java.util.function.Function;
 
 public class StreamMain {
 
-	static String msg = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFS‚Ì“¯Šúˆ— ‚ğŠJn‚µ‚Ü‚·B -----";
+	static String msg = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFSã®åŒæœŸå‡¦ç† ã‚’é–‹å§‹ã—ã¾ã™ã€‚ -----";
 
 	public StreamMain() {
 	}
 
 	/*
-	 * Stream‚ğ‰½‚©‚çì‚èo‚·
+	 * Streamã‚’ä½•ã‹ã‚‰ä½œã‚Šå‡ºã™
 	 */
 	public void p1_jdk18() {
-		// Šî–{Œn
+		// åŸºæœ¬ç³»
 		Stream.of(msg.split(" +"))
 				.sorted((a, b) -> a.compareTo(b))
 				.map(s -> String.format("\"%s\"", s))
 				.forEach(System.out::println);
 	}
 	public void p1_jdk18_2() {
-		// ”z—ñ‚©‚ç
+		// é…åˆ—ã‹ã‚‰
 		Arrays.stream(msg.split(" +"))
 				.sorted((a, b) -> a.compareTo(b))
 				.map(s -> String.format("\"%s\"", s))
 				.forEach(System.out::println);
 	}
 	public void p1_jdk18_3() {
-		// ƒRƒŒƒNƒVƒ‡ƒ“‚©‚ç
+		// ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã‹ã‚‰
 		List<String> list = Arrays.asList(msg.split(" +"));
 		list.stream()
 				.sorted((a, b) -> a.compareTo(b))
@@ -50,7 +50,7 @@ public class StreamMain {
 				.forEach(System.out::println);
 	}
 	public void p1_jdk18_4() {
-		// Reader‚©‚ç
+		// Readerã‹ã‚‰
 		try (
 				PipedReader ppr = new PipedReader();
 				PipedWriter ppw = new PipedWriter(ppr);
@@ -73,9 +73,9 @@ public class StreamMain {
 	}
 
 	/*
-	 * forEachƒƒ\ƒbƒh‚Ìˆø”‚ÍConsumerƒCƒ“ƒ^[ƒtƒF[ƒX‚ÌÀ‘•ƒNƒ‰ƒXi‚ÌƒCƒ“ƒXƒ^ƒ“ƒXj‚Å‚·B
-	 * ãq‚Ìƒ‰ƒ€ƒ_®‚ÍA“½–¼ƒNƒ‰ƒX‚ğ‚»‚Ìê‚Å’è‹`‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğ“n‚µ‚Ä‚¢‚é‚¾‚¯‚Å‚µ‚½‚Ì‚ÅA©•ª‚Å“½–¼ƒNƒ‰ƒX‚ğ‹Lq‚µ‚Ä‚à–â‘è‚È‚¢‚í‚¯‚Å‚·B
-	 * ‚µ‚½‚ª‚Á‚ÄˆÈ‰º‚Ì‚æ‚¤‚ÈÀ‘•‚ª‰Â”\‚Å‚·B
+	 * forEachãƒ¡ã‚½ãƒƒãƒ‰ã®å¼•æ•°ã¯Consumerã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã®å®Ÿè£…ã‚¯ãƒ©ã‚¹ï¼ˆã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ï¼‰ã§ã™ã€‚
+	 * ä¸Šè¿°ã®ãƒ©ãƒ ãƒ€å¼ã¯ã€åŒ¿åã‚¯ãƒ©ã‚¹ã‚’ãã®å ´ã§å®šç¾©ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ¸¡ã—ã¦ã„ã‚‹ã ã‘ã§ã—ãŸã®ã§ã€è‡ªåˆ†ã§åŒ¿åã‚¯ãƒ©ã‚¹ã‚’è¨˜è¿°ã—ã¦ã‚‚å•é¡Œãªã„ã‚ã‘ã§ã™ã€‚
+	 * ã—ãŸãŒã£ã¦ä»¥ä¸‹ã®ã‚ˆã†ãªå®Ÿè£…ãŒå¯èƒ½ã§ã™ã€‚
 	 */
 	public void p2_jdk18() {
 		List<String> list = Arrays.asList(msg.split(" +"));
@@ -91,7 +91,7 @@ public class StreamMain {
 	}
 	
 	/*
-	 * ˆêŒ©‚·‚é‚ÆA—Ç‚³‚»‚¤‚È‚Ì‚Å‚·‚ªAStream#parallelStream‚ğ—˜—p‚³‚ê‚½ê‡‚Ì“®ì‚ª‘S‚­•Ûá‚Å‚«‚Ü‚¹‚ñB
+	 * ä¸€è¦‹ã™ã‚‹ã¨ã€è‰¯ã•ãã†ãªã®ã§ã™ãŒã€Stream#parallelStreamã‚’åˆ©ç”¨ã•ã‚ŒãŸå ´åˆã®å‹•ä½œãŒå…¨ãä¿éšœã§ãã¾ã›ã‚“ã€‚
 	 */
 	public void p3_jdk18() {
 		List<String> list = Arrays.asList(msg.split(" +"));

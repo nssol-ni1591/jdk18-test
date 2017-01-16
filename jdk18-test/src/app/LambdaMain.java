@@ -11,12 +11,12 @@ import util.Print;
 
 public class LambdaMain {
 
-	static String msg = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFS‚Ì“¯Šúˆ— ‚ğŠJn‚µ‚Ü‚·B -----";
+	static String msg = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFSã®åŒæœŸå‡¦ç† ã‚’é–‹å§‹ã—ã¾ã™ã€‚ -----";
 
 	public LambdaMain() { }
 	
 	/*
-	 * ’P‚ÉA”z—ñ‚É‘Î‚µ‚ÄAƒ\[ƒg‚·‚éÀ‘••û–@
+	 * å˜ã«ã€é…åˆ—ã«å¯¾ã—ã¦ã€ã‚½ãƒ¼ãƒˆã™ã‚‹å®Ÿè£…æ–¹æ³•
 	 */
 	public String[] p1_jdk17(String[] array) {
 		Arrays.sort(array, new Comparator<String>() {
@@ -48,7 +48,7 @@ public class LambdaMain {
 	}
 
 	/*
-	 * ƒ\[ƒgˆÈŠO‚É‚àŠÈ’P‚É•ÏX‚Å‚«‚é‚±‚Æ
+	 * ã‚½ãƒ¼ãƒˆä»¥å¤–ã«ã‚‚ç°¡å˜ã«å¤‰æ›´ã§ãã‚‹ã“ã¨
 	 */
 	public String[] p2_jdk18(String[] array) {
 		Arrays.sort(array, (a, b) -> {
@@ -64,7 +64,7 @@ public class LambdaMain {
 	}
 
 	/*
-	 * ˆÈ‰º‚Íƒ‰ƒ€ƒ_®‚Æ‚¢‚¤‚æ‚è‚àAƒŠƒtƒŒƒNƒVƒ‡ƒ“‚Æ‘ÌŒ^‚ğ‚¤‚Ü‚­g‚Á‚ÄƒR[ƒh‚ğ’Z‚­‚Å‚«‚È‚¢‚©H
+	 * ä»¥ä¸‹ã¯ãƒ©ãƒ ãƒ€å¼ã¨ã„ã†ã‚ˆã‚Šã‚‚ã€ãƒªãƒ•ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã¨ç·ç§°å‹ã‚’ã†ã¾ãä½¿ã£ã¦ã‚³ãƒ¼ãƒ‰ã‚’çŸ­ãã§ããªã„ã‹ï¼Ÿ
 	 */
 	public ArrayList<String> p3_jdk18(ArrayList<String> list) {
 		list.sort((a, b) -> {
@@ -73,7 +73,7 @@ public class LambdaMain {
 		return list;
 	}
 	/*
-	 * ƒŠƒtƒŒƒNƒVƒ‡ƒ“‚Å‚ÍBˆø”‚ªArrayList‚Å‚ ‚Á‚Ä‚àA‚±‚Ìƒƒ\ƒbƒh‚ğ’T‚µo‚·‚±‚Æ‚ª‚Å‚«‚È‚¢
+	 * ãƒªãƒ•ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã§ã¯ã€‚å¼•æ•°ãŒArrayListã§ã‚ã£ã¦ã‚‚ã€ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’æ¢ã—å‡ºã™ã“ã¨ãŒã§ããªã„
 	 */
 	public List<String> p3_jdk18(List<String> list) {
 		list.sort((a, b) -> {
@@ -94,13 +94,13 @@ public class LambdaMain {
 		Print.array(m, "p2_jdk18", array);
 
 		/*
-		 * o—Í‚ğ‚©‚Á‚±‚æ‚­o—Í‚µ‚½‚¢FF
-		 * ƒ‰ƒ€ƒ_®‚Æ‚¢‚¤‚æ‚èAStreamAPI‚É‚È‚Á‚Ä‚µ‚Ü‚Á‚½
+		 * å‡ºåŠ›ã‚’ã‹ã£ã“ã‚ˆãå‡ºåŠ›ã—ãŸã„ï¼šï¼š
+		 * ãƒ©ãƒ ãƒ€å¼ã¨ã„ã†ã‚ˆã‚Šã€StreamAPIã«ãªã£ã¦ã—ã¾ã£ãŸ
 		 */
 		Stream.of(Print.print(m, "p2_jdk18_2", array)).forEach(System.out::println);
 		System.out.println();
 
-		// ã‚ÌÀ‘•‚Å‚à‚¢‚¢‚¯‚ê‚ÇA‰Â”\‚È‚ç‚Î‚à‚Á‚ÆƒXƒ}[ƒg‚ÈÀ‘•‚Í‚È‚¢‚à‚Ì‚©H
+		// ä¸Šã®å®Ÿè£…ã§ã‚‚ã„ã„ã‘ã‚Œã©ã€å¯èƒ½ãªã‚‰ã°ã‚‚ã£ã¨ã‚¹ãƒãƒ¼ãƒˆãªå®Ÿè£…ã¯ãªã„ã‚‚ã®ã‹ï¼Ÿ
 		Stream.concat(Stream.of(Print.print(m, "p2_jdk18_2", array)), Stream.of("-")).forEach(System.out::println);
 
 		Stream.concat(Arrays.stream(Print.print(m, "p2_jdk18_2", array)), Stream.of("--")).forEach(System.out::println);
@@ -114,7 +114,7 @@ public class LambdaMain {
 			Print.list(m, "p3_jdk18", list);
 		}
 		{
-			// ‚±‚ê‚ª‚¢‚¢‚Ë!!
+			// ã“ã‚ŒãŒã„ã„ã­!!
 			final List<String> list = Stream.of(array).collect(Collectors.toList());
 			Print.list(m, "p3_jdk18", list);
 		}
@@ -126,7 +126,7 @@ public class LambdaMain {
 			System.out.println("<<<<");
 		}
 		{
-			// asList‚Å¶¬‚³‚ê‚éƒNƒ‰ƒX‚ÍA[private static java.util.Arrays$ArrayList] ‚Ì‚½‚ßA’¼ÚQÆ‚·‚é‚±‚Æ‚ª‚Å‚«‚È‚¢
+			// asListã§ç”Ÿæˆã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹ã¯ã€[private static java.util.Arrays$ArrayList] ã®ãŸã‚ã€ç›´æ¥å‚ç…§ã™ã‚‹ã“ã¨ãŒã§ããªã„
 			final List<String> list = Arrays.asList(array);
 			Print.list(m, "p3_jdk18", list);
 		}

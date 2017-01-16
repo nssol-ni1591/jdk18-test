@@ -9,23 +9,23 @@ public class Calendar {
 
 	public Calendar() { }
 	public void print() {
-		// ¡Œ‚Ì‘æ‚PT‚Ì“ú—j“ú‚ğæ“¾‚·‚éB
+		// ä»Šæœˆã®ç¬¬ï¼‘é€±ã®æ—¥æ›œæ—¥ã‚’å–å¾—ã™ã‚‹ã€‚
 		LocalDate start = LocalDate.now()
 				.with(firstDayOfMonth())
 				.with(previousOrSame(DayOfWeek.SUNDAY));
 
 		/*
-		 * generate()Aiterate()Abuilder()‚ÍAƒf[ƒ^—ñ‚©‚ç‚Å‚Í‚È‚­ƒƒWƒbƒN‚Å Stream ‚ğ¶¬‚·‚éB
-		 * generate(), iterate()‚Í–³ŒÀ‚Ì Stream ‚Ì¶¬‚ğ‘O’ñ‚Æ‚µ‚Ä‚¢‚ÄA
-		 * —v‘f—ñ¶¬‘¤‚ÌƒƒWƒbƒN‚ÅI—¹‚³‚¹‚éè’i‚ª‚È‚¢‚Ì‚Å’ˆÓ‚ª•K—v‚¾B
-		 * –³ŒÀ‚Ì Stream ‚ğ~‚ß‚é‚É‚Í limit() ‚â findFirst() ‚È‚Ç‚Ì’Z—‘€ì‚ğg‚¤B
+		 * generate()ã€iterate()ã€builder()ã¯ã€ãƒ‡ãƒ¼ã‚¿åˆ—ã‹ã‚‰ã§ã¯ãªããƒ­ã‚¸ãƒƒã‚¯ã§ Stream ã‚’ç”Ÿæˆã™ã‚‹ã€‚
+		 * generate(), iterate()ã¯ç„¡é™ã® Stream ã®ç”Ÿæˆã‚’å‰æã¨ã—ã¦ã„ã¦ã€
+		 * è¦ç´ åˆ—ç”Ÿæˆå´ã®ãƒ­ã‚¸ãƒƒã‚¯ã§çµ‚äº†ã•ã›ã‚‹æ‰‹æ®µãŒãªã„ã®ã§æ³¨æ„ãŒå¿…è¦ã ã€‚
+		 * ç„¡é™ã® Stream ã‚’æ­¢ã‚ã‚‹ã«ã¯ limit() ã‚„ findFirst() ãªã©ã®çŸ­çµ¡æ“ä½œã‚’ä½¿ã†ã€‚
 		 */
-		System.out.println("Sun Mon Tue@Wed Thu Fri Sat");
-		// “ú•t‚ğ‚P“ú‚¸‚Âi‚ß‚½ Stream<LocalDate> ‚ğ¶¬‚·‚é
+		System.out.println("Sun Mon Tueã€€Wed Thu Fri Sat");
+		// æ—¥ä»˜ã‚’ï¼‘æ—¥ãšã¤é€²ã‚ãŸ Stream<LocalDate> ã‚’ç”Ÿæˆã™ã‚‹
 		java.util.stream.Stream.iterate(start, d -> d.plusDays(1L))
-				.limit(7 * 6) // 6TŠÔ•ª‚Ì—v‘f‚Å‘Å‚¿Ø‚é
+				.limit(7 * 6) // 6é€±é–“åˆ†ã®è¦ç´ ã§æ‰“ã¡åˆ‡ã‚‹
 				.map(d -> {
-					// “ú(day)‚Ì•¶š—ñ‚É‚·‚é
+					// æ—¥(day)ã®æ–‡å­—åˆ—ã«ã™ã‚‹
 					String day;
 					if (LocalDate.now().equals(d)) {
 						day = String.format("*%2d ", d.getDayOfMonth());
@@ -35,7 +35,7 @@ public class Calendar {
 					}
 					switch (d.getDayOfWeek()) {
 					case SATURDAY:
-						return day += "\n"; // “y—j“ú‚È‚ç‰üs
+						return day += "\n"; // åœŸæ›œæ—¥ãªã‚‰æ”¹è¡Œ
 					default:
 						return day;
 					}
