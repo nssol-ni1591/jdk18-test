@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PipedReader;
 import java.io.PipedWriter;
 import java.io.PrintWriter;
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -79,7 +80,9 @@ public class StreamMain {
 	 */
 	public void p2_jdk18() {
 		List<String> list = Arrays.asList(msg.split(" +"));
-		list.stream().sorted((a, b) -> a.compareTo(b)).map(s -> String.format("\"%s\"", s))
+		list.stream()
+				.sorted((a, b) -> a.compareTo(b))
+				.map(s -> String.format("\"%s\"", s))
 				.forEach(new Consumer<String>() {
 					private int ix = 1;
 
@@ -100,7 +103,6 @@ public class StreamMain {
 			.map(withIndex())
 			.forEach(v -> System.out.printf("%4s: %s\n", v.getIndex(), v.getVal()));
 	}
-
 	public <T> Function<T, ValWithIndex<T>> withIndex() {
 		return new Function<T, ValWithIndex<T>>() {
 			private int index;
@@ -111,6 +113,27 @@ public class StreamMain {
 			}
 		};
 	}
+
+	/*
+	 */
+	public void p3_jdk18_1() {
+		List<String> list = Arrays.asList(msg.split(" +"));
+		list.stream()
+			.sorted((a, b) -> a.compareTo(b))
+			.map(withIndex2())
+			.forEach(v -> System.out.printf("%4s: %s\n", v.getKey(), v.getValue()));
+	}
+	public <T> Function<T, AbstractMap.SimpleImmutableEntry<Integer,T>> withIndex2() {
+		return new Function<T, AbstractMap.SimpleImmutableEntry<Integer,T>>() {
+			private int index;
+
+			@Override
+			public  AbstractMap.SimpleImmutableEntry<Integer,T> apply(T t) {
+				return new  AbstractMap.SimpleImmutableEntry<Integer,T>(index++, t);
+			}
+		};
+	}
+
 
 	public <T> void eachWithIndex(Iterable<T> itr, ObjIntConsumer<T> action) {
 		int index = 0;
@@ -128,6 +151,7 @@ public class StreamMain {
 		Print.print(stream, "p1_jdk18_4");
 		Print.print(stream, "p2_jdk18");
 		Print.print(stream, "p3_jdk18");
+		Print.print(stream, "p3_jdk18_1");
 
 	}
 }
