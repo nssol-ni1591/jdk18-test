@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import util.AnnotationTest.MethodAnnotation;
 import util.Intercepter;
 import util.Print;
 
@@ -165,6 +164,16 @@ public class LambdaMain implements LambdaMainIF {
 			Print.list(m, "p3_jdk18", list);
 		}
 
+		// Interceptor
+		{
+			System.out.println(">>>> p3_jdk18 (Interceptor)");
+			final List<String> list = Arrays.asList(array);
+
+			LambdaMainIF targetClass = getProxyInstance(new LambdaMain());	//この記述をなくしたい
+
+			targetClass.p3_jdk18(list);
+			System.out.println("<<<<");
+		}
 		// Interceptor
 		{
 			System.out.println(">>>> p3_jdk18 (Interceptor)");
