@@ -6,6 +6,13 @@ import java.util.List;
 
 public class Print {
 
+	/**
+	 * メソッドの呼び出しに際して、メソッド名をprintしたいが、print文とメソッド呼び出しを2重に記述するのが面倒というだけのメソッド
+	 * ⇒ならloggerメソッドでもいいじゃん？
+	 * @param o リフレクション対象のインスタンス。想定は、呼び出し元のクラス
+	 * @param f リフレクションするメソッド名
+	 * @param arg メソッドを呼び出す際の引数
+	 */
 	static private <T> T wrapper(final Object o, final String f, final T arg) {
 		System.out.println(">>>> " + f);
 		try {
@@ -37,16 +44,22 @@ public class Print {
 		return null;
 	}
 
+	/*
+	 * 以下の2つのメソッドがコンパイルエラーにならないのは少々不思議？
+	 * 多重定義において、1つ目と2つ目のメソッドの返却値がことなる
+	 */
 	static public void print(final Object o, final String f) {
 		wrapper(o, f, null);
 		System.out.println();
 	}
-
 	static public <T> T print(final Object o, final String f, final T arg) {
 		T rc = wrapper(o, f, arg);
 		return rc;
 	}
 
+	/*
+	 * 配列をprintする
+	 */
 	static public void array(final Object o, final String f, final Object[] array) {
 		//Object ret = print(o, f, array);
 		//String[] array2 = (String[])ret;
