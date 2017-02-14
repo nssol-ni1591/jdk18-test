@@ -14,12 +14,17 @@ public class Print {
 	 * @param arg メソッドを呼び出す際の引数
 	 */
 	static private <T> T wrapper(final Object o, final String f, final T arg) {
-		System.out.println(">>>> " + f);
+		System.err.println(">>>> Print#wrapper リフレクション: \"" + f + "\"");
 		try {
 			Method m;
 			if (arg == null) {
 				m = o.getClass().getMethod(f, new Class[0]);
 				return (T) m.invoke(o, null);
+			}
+			// 2017/02/14 引数がListの実装クラスかどうかを明示的に指定する
+			else if (arg instanceof List) {
+				m = o.getClass().getMethod(f, List.class);
+				return (T) m.invoke(o, arg);
 			}
 			else {
 				m = o.getClass().getMethod(f, arg.getClass());
@@ -50,7 +55,7 @@ public class Print {
 	 */
 	static public void print(final Object o, final String f) {
 		wrapper(o, f, null);
-		System.out.println();
+		System.err.println();
 	}
 	static public <T> T print(final Object o, final String f, final T arg) {
 		T rc = wrapper(o, f, arg);
@@ -66,16 +71,17 @@ public class Print {
 
 		Object[] ret = wrapper(o, f, array);
 		for (Object s : ret) {
-			System.out.println(s.toString());
+			System.err.println(s.toString());
 		}
-		System.out.println();
+		System.err.println("<<<< Print#array end");
 	}
-	static public <T extends List<?>> T list(final Object o, final String f, final T array) {
+	//static public <T extends List<?>> T list(final Object o, final String f, final T array) {
+	static public <T extends List<? extends String>> T list(final Object o, final String f, final T array) {
 		T rc = wrapper(o, f, array);
 		if (rc != null) {
-			rc.forEach(System.out::println);
+			rc.forEach(System.err::println);
 		}
-		System.out.println("<<<<");
+		System.err.println("<<<< Print#list end");
 		return rc;
 	}
 }
