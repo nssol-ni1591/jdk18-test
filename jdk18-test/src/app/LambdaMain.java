@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import util.Intercepter;
 import util.Print;
 
-public class LambdaMain implements LambdaMainIF {
+public class LambdaMain<T extends List<? extends String>> implements LambdaMainIF<T> {
 
 	static String msg = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFSの同期処理 を開始します。 -----";
 
@@ -45,7 +45,7 @@ public class LambdaMain implements LambdaMainIF {
 
 	public String[] p1_jdk18_3(String[] array) {
 		Arrays.sort(array, (a, b) -> {
-			System.out.println("a=" + a + ", b=" + b);
+			System.err.println("a=" + a + ", b=" + b);
 			return a.compareToIgnoreCase(b);
 		});
 		return array;
@@ -76,29 +76,34 @@ public class LambdaMain implements LambdaMainIF {
 	}
 
 	/*
-	 * 以下はラムダ式というよりも、リフレクションと総称型をうまく使ってコードを短くできないか？
+	 * 以下はラムダ式というよりも、リフレクションと総称型をうまく使ってコードを汎用化できないか？
 	 */
-	public ArrayList<String> p3_jdk18(ArrayList<String> list) {
-		System.out.println("ArrayList<String> p3_jdk18(ArrayList<String> list)");
+	/*
+	public ArrayList<? extends String> p3_jdk18(ArrayList<? extends String> list) {
+		System.err.println("ArrayList<? extends String> p3_jdk18(ArrayList<? extends String> list)");
 		list.sort((a, b) -> {
 			return a.compareToIgnoreCase(b);
 		});
 		return list;
 	}
-
+	*/
 	/*
-	 * リフレクションでは。引数がArrayListであっても、このメソッドを探し出すことができない
+	 * 引数をArrayListからListのジェネリック化により汎用性を高めた（つもり）
+	 * リフレクション経由でアクセスする場合、引数がListの実装クラス（ArrayList）であっても、このメソッドを探し出すことができない
+	 * 2017/02/14時点では、Interceptorロジックしかcallされない
+	 * リフレクション側で引数がListクラスであることを明示的に定義する
 	 */
-	public List<String> p3_jdk18(List<String> list) {
-		System.out.println("List<String> p3_jdk18(List<String> list)");
+	//public <U extends List<? extends String>> p3_jdk18(<U extends List<? extends String>> list) {
+	public T p3_jdk18(T list) {
+		System.err.println("<T extends List<? extends String>> p3_jdk18(<T extends List<? extends String>> list)");
 		list.sort((a, b) -> {
 			return a.length() - b.length();
 		});
 		return list;
 	}
 
-	// @MethodAnnotation
-	public List<String> p4_jdk18(List<String> list) {
+	
+	public List<? extends String> p4_jdk18(List<? extends String> list) {
 		list.sort((a, b) -> {
 			return a.length() - b.length();
 		});
@@ -116,7 +121,7 @@ public class LambdaMain implements LambdaMainIF {
 
 	public static void main(String... args) {
 		String[] array = msg.split(" +");
-		LambdaMain m = new LambdaMain();
+		LambdaMain<List<String>> m = new LambdaMain<List<String>>();
 
 		Print.array(m, "p1_jdk17", array);
 		Print.array(m, "p1_jdk18", array);
@@ -129,60 +134,65 @@ public class LambdaMain implements LambdaMainIF {
 		 * 出力をかっこよく出力したい：：
 		 * ラムダ式というより、StreamAPIになってしまった
 		 */
-		Stream.of(Print.print(m, "p2_jdk18_2", array)).forEach(System.out::println);
-		System.out.println();
+		Stream.of(Print.print(m, "p2_jdk18_2", array)).forEach(System.err::println);
+		System.err.println();
 
 		// 上の実装でもいいけれど、可能ならばもっとスマートな実装はないものか？
-		Stream.concat(Stream.of(Print.print(m, "p2_jdk18_2", array)), Stream.of("-")).forEach(System.out::println);
+		Stream.concat(Stream.of(Print.print(m, "p2_jdk18_2", array)), Stream.of("-")).forEach(System.err::println);
 
-		Stream.concat(Arrays.stream(Print.print(m, "p2_jdk18_2", array)), Stream.of("--")).forEach(System.out::println);
+		Stream.concat(Arrays.stream(Print.print(m, "p2_jdk18_2", array)), Stream.of("--")).forEach(System.err::println);
 
 		Stream<String> stream = Arrays.stream(Print.print(m, "p2_jdk18_2", array));
-		Stream.concat(stream, Stream.of("---")).forEach(System.out::println);
+		Stream.concat(stream, Stream.of("---")).forEach(System.err::println);
 
+		
+		System.err.println();
+		System.err.println("----- Convert array to list -----");
 		{
+			System.err.println();
+			System.err.println(">>>> (1) forEach()で空のListに要素を積む");
+
 			final ArrayList<String> list = new ArrayList<>();
 			Stream.of(array).forEach(s -> list.add(s));
 			Print.list(m, "p3_jdk18", list);
 		}
 		{
-			// これがいいね!!
+			System.err.println();
+			System.err.println(">>>> (2)　colloct()を使用してStreamをListに変換する (一般的な手法)");
+
 			final List<String> list = Stream.of(array).collect(Collectors.toList());
 			Print.list(m, "p3_jdk18", list);
 		}
+
 		{
-			System.out.println(">>>> test");
-			Stream.of(array)
-					.sorted((a, b) -> a.compareToIgnoreCase(b))
-					.forEach(System.out::println);
-			System.out.println("<<<<");
-		}
-		{
+			System.err.println();
+			System.err.println(">>>> (3) 配列をListに変換することは可能だが、"
+					+ "asList()の返却値(Arrays$ArrayList)を引数として定義しているメソッド：p3_jdk18をリフレクションで探し出すことができない？");
 			// asListで生成されるクラスは、[private static java.util.Arrays$ArrayList]なので、
 			// 直接参照することができない
 			final List<String> list = Arrays.asList(array);
 			Print.list(m, "p3_jdk18", list);
 		}
+		{
+			System.err.println();
+			System.err.println(">>>> (4) 配列をListに変換することは可能だが、asList()の返却値をArrayLlistに変換すればOK？");
+			// asListで生成されるクラスは、[private static java.util.Arrays$ArrayList]なので、
+			// 直接参照することができない
+			final List<String> list = new ArrayList<String>(Arrays.asList(array));
+			Print.list(m, "p3_jdk18", list);
+		}
 
 		// Interceptor
 		{
-			System.out.println(">>>> p3_jdk18 (Interceptor)");
+			System.err.println();
+			System.err.println(">>>> p3_jdk18 (Interceptor)");
 			final List<String> list = Arrays.asList(array);
 
-			LambdaMainIF targetClass = getProxyInstance(new LambdaMain());	//この記述をなくしたい
+			LambdaMainIF<List<String>> targetClass = getProxyInstance(new LambdaMain<List<String>>());	//この記述をなくしたい
 
 			targetClass.p3_jdk18(list);
-			System.out.println("<<<<");
+			System.err.println("<<<< p3_jdk18 (Interceptor) end");
 		}
-		// Interceptor
-		{
-			System.out.println(">>>> p3_jdk18 (Interceptor)");
-			final List<String> list = Arrays.asList(array);
 
-			LambdaMainIF targetClass = getProxyInstance(new LambdaMain());
-
-			targetClass.p3_jdk18(list);
-			System.out.println("<<<<");
-		}
 	}
 }
