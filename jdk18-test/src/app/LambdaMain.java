@@ -1,16 +1,21 @@
 package app;
 
 import java.lang.reflect.Proxy;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import util.Intercepter;
 import util.Print;
 import util.ValidationStrategy;
+import util.Validator;
 
 public class LambdaMain<T extends List<? extends String>> implements LambdaMainIF<T> {
 
@@ -197,34 +202,52 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 			System.err.println("<<<< p3_jdk18 (Interceptor) end");
 		}
 
-		System.err.println();
+		System.err.println("--------");
 		// Design pattern
 		// (1) ストラテジ・パターン
 		{
-			System.err.println("<<<< ストラテジ・パターン (jdk17)");
-			// jdk1.7
-			ValidationStrategy v3 = new ValidationStrategy() {
-				public boolean execute(String s) {
-					return s.matches("\\d+");
-				}
-			};
+			System.err.println("<<<< ストラテジ・パターン (jdk18)");
+			// jdk1.8
+			Validator v3 = new Validator((String s) -> s.matches("\\d+"));
+			System.err.println(v3.validate("aaaa"));
+
+			Validator v4 = new Validator((String s) -> s.matches("[a-z]+"));
+			System.err.println(v4.validate("bbbb"));
+		}
+		{
+			System.err.println("<<<< ストラテジ・パターン (直接ストラテジのインターフェースを使用することもできるはず)");
+			// jdk1.8
+			ValidationStrategy v3 = (String s) -> s.matches("\\d+");
 			System.err.println(v3.execute("aaaa"));
-			
-			ValidationStrategy v4 = new ValidationStrategy() {
-				public boolean execute(String s) {
-					return s.matches("[a-z]+");
-				}
-			};
+
+			ValidationStrategy v4 = (String s) -> s.matches("[a-z]+");
 			System.err.println(v4.execute("bbbb"));
 		}
 		{
-			/*
-			System.out.println(new ValidationStrategy("aaaa") -> s.matches("\\d+"));
-			
-			ValidationStrategy v4 = new ValidationStrategy((String s) -> s.matches("[a-z]+"));
-			System.out.println(v4.execute("bbbb"));
-			*/
+			System.err.println("<<<< ストラテジ・パターン (java.util.functionを使う)");
+			// jdk1.8
+			Predicate<String> p3 = s -> s.matches("\\d+");
+			System.err.println(p3.test("aaaa"));
+
+			Predicate<String> p4 = s -> s.matches("[a-z]+");
+			System.err.println(p4.test("bbbb"));
 		}
-		//
+		{
+			System.err.println("<<<< ストラテジ・パターン 2()");
+			// jdk1.8
+			Function<String, Boolean> f3 = s -> s.matches("\\d+");
+			System.err.println(f3.apply("aaaa"));
+
+			Function<String, Integer> f4 = s -> s.length();
+			System.err.println(f4.apply("aaaa"));
+		}
+		
+		System.err.println("--------");
+		{
+			Path p = Paths.get("a", "b", "cee"); // line n1
+			System.out.println(p);
+			System.out.println(p.endsWith(Paths.get("b", "cee")));
+			System.out.println(p.endsWith(Paths.get("ee")));
+		}
 	}
 }

@@ -1,5 +1,6 @@
 package util;
 
 public interface ValidationStrategy {
-	default boolean execute(String s) { return false; };
+	boolean execute(String s);
+//	int length(String s);
 }
