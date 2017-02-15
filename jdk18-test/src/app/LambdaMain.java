@@ -113,8 +113,10 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 	public static <T> T getProxyInstance(T instance) {
 		Class<? extends Object> clazz = instance.getClass();
 		// 対象クラスが実装するインターフェースのリスト
+		@SuppressWarnings("rawtypes")
 		Class[] classes = clazz.getInterfaces();
 		Intercepter intercepter = new Intercepter(instance);
+		@SuppressWarnings("unchecked")
 		T proxyInstance = (T) Proxy.newProxyInstance(clazz.getClassLoader(), classes, intercepter);
 		return proxyInstance;
 	}

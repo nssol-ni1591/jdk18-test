@@ -6,6 +6,11 @@ import java.util.List;
 
 public class Print {
 
+	@SuppressWarnings("unchecked")
+	static private <T> T cast(final Object o) {
+		return (T) o;
+	}
+
 	/**
 	 * メソッドの呼び出しに際して、メソッド名をprintしたいが、print文とメソッド呼び出しを2重に記述するのが面倒というだけのメソッド
 	 * ⇒ならloggerメソッドでもいいじゃん？
@@ -18,18 +23,17 @@ public class Print {
 		try {
 			Method m;
 			if (arg == null) {
-				m = o.getClass().getMethod(f, new Class[0]);
-				return (T) m.invoke(o, null);
+				m = o.getClass().getMethod(f);
 			}
 			// 2017/02/14 引数がListの実装クラスかどうかを明示的に指定する
 			else if (arg instanceof List) {
 				m = o.getClass().getMethod(f, List.class);
-				return (T) m.invoke(o, arg);
 			}
 			else {
 				m = o.getClass().getMethod(f, arg.getClass());
-				return (T) m.invoke(o, arg);
 			}
+			return cast(m.invoke(o, arg));
+
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
