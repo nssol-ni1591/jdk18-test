@@ -206,6 +206,23 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 		// Design pattern
 		// (1) ストラテジ・パターン
 		{
+			System.err.println("<<<< ストラテジ・パターン (jdk17)");
+			// jdk1.7
+			ValidationStrategy v3 = new ValidationStrategy() {
+				public boolean execute(String s) {
+					return s.matches("\\d+");
+				}
+			};
+			System.err.println(v3.execute("aaaa"));
+
+			ValidationStrategy v4 = new ValidationStrategy() {
+				public boolean execute(String s) {
+					return s.matches("[a-z]+");
+				}
+			};
+			System.err.println(v4.execute("bbbb"));
+		}
+		{
 			System.err.println("<<<< ストラテジ・パターン (jdk18)");
 			// jdk1.8
 			Validator v3 = new Validator((String s) -> s.matches("\\d+"));
