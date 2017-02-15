@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import util.Intercepter;
 import util.Print;
+import util.ValidationStrategy;
 
 public class LambdaMain<T extends List<? extends String>> implements LambdaMainIF<T> {
 
@@ -196,5 +197,34 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 			System.err.println("<<<< p3_jdk18 (Interceptor) end");
 		}
 
+		System.err.println();
+		// Design pattern
+		// (1) ストラテジ・パターン
+		{
+			System.err.println("<<<< ストラテジ・パターン (jdk17)");
+			// jdk1.7
+			ValidationStrategy v3 = new ValidationStrategy() {
+				public boolean execute(String s) {
+					return s.matches("\\d+");
+				}
+			};
+			System.err.println(v3.execute("aaaa"));
+			
+			ValidationStrategy v4 = new ValidationStrategy() {
+				public boolean execute(String s) {
+					return s.matches("[a-z]+");
+				}
+			};
+			System.err.println(v4.execute("bbbb"));
+		}
+		{
+			/*
+			System.out.println(new ValidationStrategy("aaaa") -> s.matches("\\d+"));
+			
+			ValidationStrategy v4 = new ValidationStrategy((String s) -> s.matches("[a-z]+"));
+			System.out.println(v4.execute("bbbb"));
+			*/
+		}
+		//
 	}
 }
