@@ -32,7 +32,7 @@ public class Print {
 			else {
 				m = o.getClass().getMethod(f, arg.getClass());
 			}
-			return cast(m.invoke(o));
+			return cast(m.invoke(o, arg));
 
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
