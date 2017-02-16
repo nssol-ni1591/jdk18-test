@@ -18,7 +18,7 @@ public class Intercepter implements InvocationHandler {
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		// TODO Auto-generated method stub
 
-    	System.err.println("called Intercepter.invoke");
+    	System.out.println("called Intercepter.invoke");
 
     	enter(method, args);
 
@@ -34,7 +34,7 @@ public class Intercepter implements InvocationHandler {
     private void enter(Method method, Object[] args) {
 
 		// 以下、MethodAnnotationアノテーションがついているメソッドは、処理を追加する
-		System.err.println("AOP処理開始");
+		System.out.println("AOP処理開始");
 
 		// MethodAnnotationアノテーションがついていないメソッドは、追加処理せず、終了。
 		if (!Arrays.stream(method.getAnnotations()).anyMatch(p -> p instanceof MethodAnnotation)) {
@@ -48,7 +48,7 @@ public class Intercepter implements InvocationHandler {
 			Arrays.stream(args).forEach(arg -> sb.append(arg.toString()).append(" "));
 		}
 		// メソッド名と引数を出力
-		System.err.println("呼び出しメソッド:" + method.getName() + " 引数:" + sb.toString());
+		System.out.println("呼び出しメソッド:" + method.getName() + " 引数:" + sb.toString());
 		// 実際に実施し、結果を保存する
     }
     
@@ -57,12 +57,12 @@ public class Intercepter implements InvocationHandler {
     private void leave(Method method, Object result) {
 
 		// AOPの処理が完了したことを出力。空行も出力。
-		System.err.println("AOP処理完了");
-		//System.err.println();
+		System.out.println("AOP処理完了");
+		//System.out.println();
 
 		// 結果がnullでなければ、結果を出力する
 		if (result != null) {
-			System.err.println("結果:" + result.toString());
+			System.out.println("結果:" + result.toString());
 		}
 	}
 
