@@ -51,7 +51,7 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 
 	public String[] p1_jdk18_3(String[] array) {
 		Arrays.sort(array, (a, b) -> {
-			System.err.println("a=" + a + ", b=" + b);
+			System.out.println("a=" + a + ", b=" + b);
 			return a.compareToIgnoreCase(b);
 		});
 		return array;
@@ -86,7 +86,7 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 	 */
 	/*
 	public ArrayList<? extends String> p3_jdk18(ArrayList<? extends String> list) {
-		System.err.println("ArrayList<? extends String> p3_jdk18(ArrayList<? extends String> list)");
+		System.out.println("ArrayList<? extends String> p3_jdk18(ArrayList<? extends String> list)");
 		list.sort((a, b) -> {
 			return a.compareToIgnoreCase(b);
 		});
@@ -101,7 +101,7 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 	 */
 	//public <U extends List<? extends String>> p3_jdk18(<U extends List<? extends String>> list) {
 	public T p3_jdk18(T list) {
-		System.err.println("<T extends List<? extends String>> p3_jdk18(<T extends List<? extends String>> list)");
+		System.out.println("<T extends List<? extends String>> p3_jdk18(<T extends List<? extends String>> list)");
 		list.sort((a, b) -> {
 			return a.length() - b.length();
 		});
@@ -142,39 +142,39 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 		 * 出力をかっこよく出力したい：：
 		 * ラムダ式というより、StreamAPIになってしまった
 		 */
-		Stream.of(Print.print(m, "p2_jdk18_2", array)).forEach(System.err::println);
-		System.err.println();
+		Stream.of(Print.print(m, "p2_jdk18_2", array)).forEach(System.out::println);
+		System.out.println();
 
 		// 上の実装でもいいけれど、可能ならばもっとスマートな実装はないものか？
-		Stream.concat(Stream.of(Print.print(m, "p2_jdk18_2", array)), Stream.of("-")).forEach(System.err::println);
+		Stream.concat(Stream.of(Print.print(m, "p2_jdk18_2", array)), Stream.of("-")).forEach(System.out::println);
 
-		Stream.concat(Arrays.stream(Print.print(m, "p2_jdk18_2", array)), Stream.of("--")).forEach(System.err::println);
+		Stream.concat(Arrays.stream(Print.print(m, "p2_jdk18_2", array)), Stream.of("--")).forEach(System.out::println);
 
 		Stream<String> stream = Arrays.stream(Print.print(m, "p2_jdk18_2", array));
-		Stream.concat(stream, Stream.of("---")).forEach(System.err::println);
+		Stream.concat(stream, Stream.of("---")).forEach(System.out::println);
 
 		
-		System.err.println();
-		System.err.println("----- Convert array to list -----");
+		System.out.println();
+		System.out.println("----- Convert array to list -----");
 		{
-			System.err.println();
-			System.err.println(">>>> (1) forEach()で空のListに要素を積む");
+			System.out.println();
+			System.out.println(">>>> (1) forEach()で空のListに要素を積む");
 
 			final ArrayList<String> list = new ArrayList<>();
 			Stream.of(array).forEach(s -> list.add(s));
 			Print.list(m, "p3_jdk18", list);
 		}
 		{
-			System.err.println();
-			System.err.println(">>>> (2)　colloct()を使用してStreamをListに変換する (一般的な手法)");
+			System.out.println();
+			System.out.println(">>>> (2)　colloct()を使用してStreamをListに変換する (一般的な手法)");
 
 			final List<String> list = Stream.of(array).collect(Collectors.toList());
 			Print.list(m, "p3_jdk18", list);
 		}
 
 		{
-			System.err.println();
-			System.err.println(">>>> (3) 配列をListに変換することは可能だが、"
+			System.out.println();
+			System.out.println(">>>> (3) 配列をListに変換することは可能だが、"
 					+ "asList()の返却値(Arrays$ArrayList)を引数として定義しているメソッド：p3_jdk18をリフレクションで探し出すことができない？");
 			// asListで生成されるクラスは、[private static java.util.Arrays$ArrayList]なので、
 			// 直接参照することができない
@@ -182,8 +182,8 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 			Print.list(m, "p3_jdk18", list);
 		}
 		{
-			System.err.println();
-			System.err.println(">>>> (4) 配列をListに変換することは可能だが、asList()の返却値をArrayLlistに変換すればOK？");
+			System.out.println();
+			System.out.println(">>>> (4) 配列をListに変換することは可能だが、asList()の返却値をArrayLlistに変換すればOK？");
 			// asListで生成されるクラスは、[private static java.util.Arrays$ArrayList]なので、
 			// 直接参照することができない
 			final List<String> list = new ArrayList<String>(Arrays.asList(array));
@@ -192,74 +192,74 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 
 		// Interceptor
 		{
-			System.err.println();
-			System.err.println(">>>> p3_jdk18 (Interceptor)");
+			System.out.println();
+			System.out.println(">>>> p3_jdk18 (Interceptor)");
 			final List<String> list = Arrays.asList(array);
 
 			LambdaMainIF<List<String>> targetClass = getProxyInstance(new LambdaMain<List<String>>());	//この記述をなくしたい
 
 			targetClass.p3_jdk18(list);
-			System.err.println("<<<< p3_jdk18 (Interceptor) end");
+			System.out.println("<<<< p3_jdk18 (Interceptor) end");
 		}
 
-		System.err.println("--------");
+		System.out.println("--------");
 		// Design pattern
 		// (1) ストラテジ・パターン
 		{
-			System.err.println("<<<< ストラテジ・パターン (jdk17)");
+			System.out.println("<<<< ストラテジ・パターン (jdk17)");
 			// jdk1.7
 			ValidationStrategy v3 = new ValidationStrategy() {
 				public boolean execute(String s) {
 					return s.matches("\\d+");
 				}
 			};
-			System.err.println(v3.execute("aaaa"));
+			System.out.println(v3.execute("aaaa"));
 
 			ValidationStrategy v4 = new ValidationStrategy() {
 				public boolean execute(String s) {
 					return s.matches("[a-z]+");
 				}
 			};
-			System.err.println(v4.execute("bbbb"));
+			System.out.println(v4.execute("bbbb"));
 		}
 		{
-			System.err.println("<<<< ストラテジ・パターン (jdk18)");
+			System.out.println("<<<< ストラテジ・パターン (jdk18)");
 			// jdk1.8
 			Validator v3 = new Validator((String s) -> s.matches("\\d+"));
-			System.err.println(v3.validate("aaaa"));
+			System.out.println(v3.validate("aaaa"));
 
 			Validator v4 = new Validator((String s) -> s.matches("[a-z]+"));
-			System.err.println(v4.validate("bbbb"));
+			System.out.println(v4.validate("bbbb"));
 		}
 		{
-			System.err.println("<<<< ストラテジ・パターン (直接ストラテジのインターフェースを使用することもできるはず)");
+			System.out.println("<<<< ストラテジ・パターン (直接ストラテジのインターフェースを使用することもできるはず)");
 			// jdk1.8
 			ValidationStrategy v3 = (String s) -> s.matches("\\d+");
-			System.err.println(v3.execute("aaaa"));
+			System.out.println(v3.execute("aaaa"));
 
 			ValidationStrategy v4 = (String s) -> s.matches("[a-z]+");
-			System.err.println(v4.execute("bbbb"));
+			System.out.println(v4.execute("bbbb"));
 		}
 		{
-			System.err.println("<<<< ストラテジ・パターン (java.util.functionを使う)");
+			System.out.println("<<<< ストラテジ・パターン (java.util.functionを使う)");
 			// jdk1.8
 			Predicate<String> p3 = s -> s.matches("\\d+");
-			System.err.println(p3.test("aaaa"));
+			System.out.println(p3.test("aaaa"));
 
 			Predicate<String> p4 = s -> s.matches("[a-z]+");
-			System.err.println(p4.test("bbbb"));
+			System.out.println(p4.test("bbbb"));
 		}
 		{
-			System.err.println("<<<< ストラテジ・パターン 2()");
+			System.out.println("<<<< ストラテジ・パターン 2()");
 			// jdk1.8
 			Function<String, Boolean> f3 = s -> s.matches("\\d+");
-			System.err.println(f3.apply("aaaa"));
+			System.out.println(f3.apply("aaaa"));
 
 			Function<String, Integer> f4 = s -> s.length();
-			System.err.println(f4.apply("aaaa"));
+			System.out.println(f4.apply("aaaa"));
 		}
 		
-		System.err.println("--------");
+		System.out.println("--------");
 		{
 			Path p = Paths.get("a", "b", "cee"); // line n1
 			System.out.println(p);
