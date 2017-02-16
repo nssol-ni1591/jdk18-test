@@ -189,11 +189,12 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 			Print.list(m, "p3_jdk18", list);
 		}
 
-		System.err.println("--------");
+		System.out.println("--------");
 		// Interceptor
 		{
-			System.err.println();
-			System.err.println(">>>> p3_jdk18 (Interceptor:単にAOP云々というログが出ればOK)");
+			System.out.println();
+			System.out.println(">>>> p3_jdk18 (Interceptor:単にAOP云々というログが出ればOK)");
+
 			final List<String> list = Arrays.asList(array);
 
 			LambdaMainIF<List<String>> targetClass = getProxyInstance(new LambdaMain<List<String>>());	//この記述をなくしたい
