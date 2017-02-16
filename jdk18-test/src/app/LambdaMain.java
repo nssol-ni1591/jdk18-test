@@ -19,7 +19,7 @@ import util.Validator;
 
 public class LambdaMain<T extends List<? extends String>> implements LambdaMainIF<T> {
 
-	static String msg = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFSの同期処理 を開始します。 -----";
+	static String msg = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFSの同期処理 を開始します。 +++++";
 
 	public LambdaMain() {
 	}
@@ -97,7 +97,7 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 	 * 引数をArrayListからListのジェネリック化により汎用性を高めた（つもり）
 	 * リフレクション経由でアクセスする場合、引数がListの実装クラス（ArrayList）であっても、このメソッドを探し出すことができない
 	 * 2017/02/14時点では、Interceptorロジックしかcallされない
-	 * リフレクション側で引数がListクラスであることを明示的に定義する
+	 * リフレクション側で引数がListクラスであることを明示的に定義する　@See util.Print#wrapper
 	 */
 	//public <U extends List<? extends String>> p3_jdk18(<U extends List<? extends String>> list) {
 	public T p3_jdk18(T list) {
@@ -108,7 +108,6 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 		return list;
 	}
 
-	
 	public List<? extends String> p4_jdk18(List<? extends String> list) {
 		list.sort((a, b) -> {
 			return a.length() - b.length();
@@ -190,10 +189,12 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 			Print.list(m, "p3_jdk18", list);
 		}
 
+		System.out.println("--------");
 		// Interceptor
 		{
 			System.out.println();
-			System.out.println(">>>> p3_jdk18 (Interceptor)");
+			System.out.println(">>>> p3_jdk18 (Interceptor:単にAOP云々というログが出ればOK)");
+
 			final List<String> list = Arrays.asList(array);
 
 			LambdaMainIF<List<String>> targetClass = getProxyInstance(new LambdaMain<List<String>>());	//この記述をなくしたい
