@@ -24,6 +24,7 @@ public class Print {
 			Method m;
 			if (arg == null) {
 				m = o.getClass().getMethod(f);
+				return cast(m.invoke(o));
 			}
 			// 2017/02/14 引数がListの実装クラスかどうかを明示的に指定する
 			else if (arg instanceof List) {

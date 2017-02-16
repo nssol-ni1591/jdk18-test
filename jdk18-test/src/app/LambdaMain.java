@@ -194,6 +194,7 @@ public class LambdaMain<T extends List<? extends String>> implements LambdaMainI
 		{
 			System.out.println();
 			System.out.println(">>>> p3_jdk18 (Interceptor:単にAOP云々というログが出ればOK)");
+
 			final List<String> list = Arrays.asList(array);
 
 			LambdaMainIF<List<String>> targetClass = getProxyInstance(new LambdaMain<List<String>>());	//この記述をなくしたい
