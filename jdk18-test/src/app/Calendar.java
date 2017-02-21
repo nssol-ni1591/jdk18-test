@@ -1,6 +1,10 @@
 package app;
 
 import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
+import java.util.stream.Stream;
+
 import static java.time.temporal.TemporalAdjusters.*;
 
 import java.time.DayOfWeek;
@@ -14,15 +18,21 @@ public class Calendar {
 				.with(firstDayOfMonth())
 				.with(previousOrSame(DayOfWeek.SUNDAY));
 
+		Stream.iterate(DayOfWeek.SUNDAY, d -> d.plus(1L))
+			.limit(7) // 1週間分の要素で打ち切る
+			.map(d -> d.getDisplayName(TextStyle.SHORT_STANDALONE, Locale.US))
+			.map(s -> s + " ")
+			.forEach(System.out::print);
+		System.out.println();
+
 		/*
 		 * generate()、iterate()、builder()は、データ列からではなくロジックで Stream を生成する。
 		 * generate(), iterate()は無限の Stream の生成を前提としていて、
 		 * 要素列生成側のロジックで終了させる手段がないので注意が必要だ。
 		 * 無限の Stream を止めるには limit() や findFirst() などの短絡操作を使う。
 		 */
-		System.out.println("Sun Mon Tue　Wed Thu Fri Sat");
 		// 日付を１日ずつ進めた Stream<LocalDate> を生成する
-		java.util.stream.Stream.iterate(start, d -> d.plusDays(1L))
+		Stream.iterate(start, d -> d.plusDays(1L))
 				.limit(7 * 6) // 6週間分の要素で打ち切る
 				.map(d -> {
 					// 日(day)の文字列にする
