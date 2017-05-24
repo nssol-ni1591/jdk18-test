@@ -1,4 +1,4 @@
-package util;
+package app.strategy;
 
 public class Validator {
 
@@ -15,6 +15,9 @@ public class Validator {
 	}
 	public boolean validate(String s) {
 		return strategy.execute(s);
+	}
+	public String getPattern() {
+		return pattern;
 	}
 	/*
 	public int length(String s) {

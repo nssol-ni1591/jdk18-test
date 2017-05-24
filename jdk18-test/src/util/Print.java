@@ -19,6 +19,7 @@ public class Print {
 	 * @param arg メソッドを呼び出す際の引数
 	 */
 	static private <T> T wrapper(final Object o, final String f, final T arg) {
+		System.out.println();
 		System.out.println(">>>> Print#wrapper リフレクション: \"" + f + "\"");
 		try {
 			Method m;

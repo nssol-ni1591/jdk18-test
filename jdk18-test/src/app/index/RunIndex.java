@@ -1,77 +1,20 @@
-package app;
+package app.index;
 
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PipedReader;
-import java.io.PipedWriter;
-import java.io.PrintWriter;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.ObjIntConsumer;
-import java.util.stream.Stream;
 
 import util.Print;
-import util.ValWithIndex;
 
 import java.util.function.Function;
 
-public class StreamMain {
+/*
+ * 出力にIndexを付加する実装たち
+ */
+public class RunIndex {
 
 	static String msg = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFSの同期処理 を開始します。 -----";
-
-	public StreamMain() {
-	}
-
-	/*
-	 * Streamを何から作り出す
-	 */
-	public void p1_jdk18() {
-		// 基本系
-		Stream.of(msg.split(" +"))
-				.sorted((a, b) -> a.compareTo(b))
-				.map(s -> String.format("\"%s\"", s))
-				.forEach(System.out::println);
-	}
-	public void p1_jdk18_2() {
-		// 配列から
-		Arrays.stream(msg.split(" +"))
-				.sorted((a, b) -> a.compareTo(b))
-				.map(s -> String.format("\"%s\"", s))
-				.forEach(System.out::println);
-	}
-	public void p1_jdk18_3() {
-		// コレクションから
-		List<String> list = Arrays.asList(msg.split(" +"));
-		list.stream()
-				.sorted((a, b) -> a.compareTo(b))
-				.map(s -> String.format("\"%s\"", s))
-				.forEach(System.out::println);
-	}
-	public void p1_jdk18_4() {
-		// Readerから
-		try (
-				PipedReader ppr = new PipedReader();
-				PipedWriter ppw = new PipedWriter(ppr);
-				PrintWriter pw = new PrintWriter(ppw);
-				BufferedReader br = new BufferedReader(ppr);
-				)
-		{
-			Arrays.stream(msg.split(msg)).forEach(pw::println);
-			pw.flush();
-			pw.close();
-
-			br.lines()
-					.sorted((a, b) -> a.compareTo(b))
-					.map(s -> String.format("\"%s\"", s))
-					.forEach(System.out::println);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	/*
 	 * forEachメソッドの引数はConsumerインターフェースの実装クラス（のインスタンス）です。
@@ -94,11 +37,24 @@ public class StreamMain {
 	}
 	
 	/*
-	 * 一見すると、良さそうなのですが、Stream#parallelStreamを利用された場合の動作が全く保障できません。
+	 * Indexを付加する
+	 * ValWithIndexクラスが必要
 	 */
 	public void p3_jdk18() {
 		List<String> list = Arrays.asList(msg.split(" +"));
 		list.stream()
+			.sorted((a, b) -> a.compareTo(b))
+			.map(withIndex())
+			.forEach(v -> System.out.printf("%4s: %s\n", v.getIndex(), v.getVal()));
+	}
+	/*
+	 * 一見すると、良さそうなのですが、Stream#parallelStreamを利用された場合の動作が全く保障できません。
+	 * 実行タイミングによっては、結果が異なる
+	 */
+	public void p3_jdk18_1() {
+		List<String> list = Arrays.asList(msg.split(" +"));
+		list.stream()
+			.parallel()
 			.sorted((a, b) -> a.compareTo(b))
 			.map(withIndex())
 			.forEach(v -> System.out.printf("%4s: %s\n", v.getIndex(), v.getVal()));
@@ -116,7 +72,7 @@ public class StreamMain {
 
 	/*
 	 */
-	public void p3_jdk18_1() {
+	public void p4_jdk18() {
 		List<String> list = Arrays.asList(msg.split(" +"));
 		list.stream()
 			.sorted((a, b) -> a.compareTo(b))
@@ -134,24 +90,27 @@ public class StreamMain {
 		};
 	}
 
-
+/*
 	public <T> void eachWithIndex(Iterable<T> itr, ObjIntConsumer<T> action) {
 		int index = 0;
 		for (T t : itr) {
 			action.accept(t, index++);
 		}
 	}
-
+*/
 	public static void main(String... arvs) {
-		StreamMain stream = new StreamMain();
+		RunIndex stream = new RunIndex();
 
-		Print.print(stream, "p1_jdk18");
-		Print.print(stream, "p1_jdk18_2");
-		Print.print(stream, "p1_jdk18_3");
-		Print.print(stream, "p1_jdk18_4");
+		// Consumerを実装するパターン。実装側で自由な情報を付加することができる
 		Print.print(stream, "p2_jdk18");
+
+		// Indexを付加するためのクラス ValWithIndex を使用するパターン
 		Print.print(stream, "p3_jdk18");
+		// parallelを使用するとソートが正常に動作しないことの確認　⇒　当然ですね
 		Print.print(stream, "p3_jdk18_1");
 
+		// Indexを付加するためのクラスに標準の AbstractMap.SimpleImmutableEntry を使用するパターン
+		Print.print(stream, "p4_jdk18");
 	}
+
 }

@@ -1,4 +1,4 @@
-package util;
+package app.index;
 public class ValWithIndex<T> {
 	private final T val;
 	private final int index;

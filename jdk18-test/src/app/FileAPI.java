@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class FileAPI {
 
 	/*
-	 * 安全な再thorw：
+	 * 安全な再throw：
 	 * メソッド内で発生する例外をExceptionでcatchして再throwしているが、throws句はIOExceptionのままでよい
 	 */
 	private void print(Path path) throws IOException {
@@ -93,6 +93,14 @@ public class FileAPI {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+
+		System.out.println("---- path api ----");
+		{
+			Path p = Paths.get("a", "b", "cee"); // line n1
+			System.out.println(p);
+			System.out.println(p.endsWith(Paths.get("b", "cee")));
+			System.out.println(p.endsWith(Paths.get("ee")));
 		}
 	}
 

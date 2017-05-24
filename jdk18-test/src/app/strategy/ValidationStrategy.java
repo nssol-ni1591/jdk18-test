@@ -1,4 +1,4 @@
-package util;
+package app.strategy;
 
 public interface ValidationStrategy {
 	boolean execute(String s);

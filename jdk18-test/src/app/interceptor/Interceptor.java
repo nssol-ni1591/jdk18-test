@@ -1,16 +1,18 @@
-package util;
+package app.interceptor;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 
-import util.AnnotationTest.MethodAnnotation;
+import app.interceptor.PrintCall.MethodAnnotation;
 
-public class Intercepter implements InvocationHandler {
+
+public class Interceptor implements InvocationHandler {
 
     private Object target;
 
-    public Intercepter(Object target) {
+    public Interceptor(Object target) {
         this.target = target;
     }
 
@@ -34,11 +36,13 @@ public class Intercepter implements InvocationHandler {
     private void enter(Method method, Object[] args) {
 
 		// 以下、MethodAnnotationアノテーションがついているメソッドは、処理を追加する
-		System.out.println("AOP処理開始");
+		System.out.println("AOP処理開始:");
 
 		// MethodAnnotationアノテーションがついていないメソッドは、追加処理せず、終了。
+		Arrays.stream(method.getAnnotations()).forEach(x -> System.out.println(x));
+		// 実装クラス側ではなく、interface側のメソッドにAnnotationを付加する
 		if (!Arrays.stream(method.getAnnotations()).anyMatch(p -> p instanceof MethodAnnotation)) {
-			//return method.invoke(target, args);
+			//method.invoke(target, args);
 			return;
 		}
 
@@ -57,13 +61,24 @@ public class Intercepter implements InvocationHandler {
     private void leave(Method method, Object result) {
 
 		// AOPの処理が完了したことを出力。空行も出力。
-		System.out.println("AOP処理完了");
+		System.out.println("AOP処理完了:");
 		//System.out.println();
 
 		// 結果がnullでなければ、結果を出力する
 		if (result != null) {
 			System.out.println("結果:" + result.toString());
 		}
+	}
+
+	public static <T> T getProxyInstance(T instance) {
+		Class<? extends Object> clazz = instance.getClass();
+		// 対象クラスが実装するインターフェースのリスト
+		@SuppressWarnings("rawtypes")
+		Class[] classes = clazz.getInterfaces();
+		Interceptor intercepter = new Interceptor(instance);
+		@SuppressWarnings("unchecked")
+		T proxyInstance = (T) Proxy.newProxyInstance(clazz.getClassLoader(), classes, intercepter);
+		return proxyInstance;
 	}
 
 }
