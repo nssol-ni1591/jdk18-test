@@ -2,6 +2,7 @@ package app;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +14,16 @@ public class LambdaSort<T extends List<? extends String>> {
 
 	static String msg = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFSの同期処理 を開始します。 +++++";
 
+	public String[] p1_jdk1x(String[] array) {
+		return array;
+	}
+	public String[] p1_jdk1y(String[] array) {
+		String[] b = new String[array.length];
+		for (int ix = 0; ix < array.length; ix ++) {
+			b[array.length - ix - 1] = array[ix];
+		}
+		return b;
+	}
 	/*
 	 * 単に、配列に対して、ソートする実装方法
 	 */
@@ -26,28 +37,40 @@ public class LambdaSort<T extends List<? extends String>> {
 		return array;
 	}
 
+	// 自然順序
 	public String[] p1_jdk18(String[] array) {
 		Arrays.sort(array, (a, b) -> a.compareToIgnoreCase(b));
 		return array;
 	}
-
-	public String[] p1_jdk18_2(String[] array) {
-		Arrays.sort(array, (a, b) -> {
-			return a.compareToIgnoreCase(b);
-		});
-		return array;
-	}
-
-	public String[] p1_jdk18_3(String[] array) {
-		Arrays.sort(array, (a, b) -> {
-			System.out.println("a=" + a + ", b=" + b);
-			return a.compareToIgnoreCase(b);
-		});
-		return array;
-	}
-
 	public String[] p1_jdk18_4(String[] array) {
 		Arrays.sort(array, String::compareToIgnoreCase);
+		return array;
+	}
+	public String[] p1_jdk18_5(String[] array) {
+		Arrays.sort(array, Comparator.naturalOrder());
+		return array;
+	}
+	public String[] p1_jdk18_6(String[] array) {
+		Arrays.sort(array, Comparator.reverseOrder());
+		return array;
+	}
+
+	// 並び逆順
+	public String[] p1_jdk18_7(String[] array) {
+		Arrays.sort(array, (a, b) -> { return -1; });
+		return array;
+	}
+	public String[] p1_jdk18_8(String[] array) {
+		List<String> list = Arrays.asList(array);
+		Collections.reverse(list);
+		return (String[])list.toArray();
+	}
+	public String[] p1_jdk18_9(String[] array) {
+		Arrays.sort(array, new Comparator<String>() {
+			public int compare(String o1, String o2) {
+				return -1;
+			}
+		});
 		return array;
 	}
 
@@ -75,11 +98,20 @@ public class LambdaSort<T extends List<? extends String>> {
 		String[] array = msg.split(" +");
 		LambdaSort<List<String>> m = new LambdaSort<List<String>>();
 
+		Print.array(m, "p1_jdk1x", array);
+		Print.array(m, "p1_jdk1y", array);
+
 		Print.array(m, "p1_jdk17", array);
 		Print.array(m, "p1_jdk18", array);
 		// Print.printArray(m, "p1_jdk18_2", array);
 		// Print.printArray(m, "p1_jdk18_3", array);
 		Print.array(m, "p1_jdk18_4", array);
+		Print.array(m, "p1_jdk18_5", array);
+		Print.array(m, "p1_jdk18_6", array);
+		Print.array(m, "p1_jdk18_7", array);
+		Print.array(m, "p1_jdk18_8", array);
+		Print.array(m, "p1_jdk18_9", array);
+
 		Print.array(m, "p2_jdk18", array);
 
 		/*

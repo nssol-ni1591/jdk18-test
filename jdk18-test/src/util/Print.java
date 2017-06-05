@@ -2,6 +2,7 @@ package util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 
 public class Print {
@@ -75,7 +76,8 @@ public class Print {
 		//Object ret = print(o, f, array);
 		//String[] array2 = (String[])ret;
 
-		Object[] ret = wrapper(o, f, array);
+		Object[] b = Arrays.copyOf(array, array.length);
+		Object[] ret = wrapper(o, f, b);
 		for (Object s : ret) {
 			System.out.println(s.toString());
 		}
