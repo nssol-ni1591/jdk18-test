@@ -17,34 +17,36 @@ import util.Print;
  */
 public class StreamSupplier {
 
-	static String msg = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFSの同期処理 を開始します。 -----";
+	private static final String MSG = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFSの同期処理 を開始します。 -----";
+	private static final String FORMAT = "\"%s\"";
 
 	public StreamSupplier() {
+		// Do nothing
 	}
 
-	public void p1_jdk18() {
+	public void p1Jdk18() {
 		// 基本系
-		Stream.of(msg.split(" +"))
+		Stream.of(MSG.split(" +"))
 				.sorted((a, b) -> a.compareTo(b))
-				.map(s -> String.format("\"%s\"", s))
-				.forEach(System.out::println);
+				.map(s -> String.format(FORMAT, s))
+				.forEach(Print::println);
 	}
-	public void p1_jdk18_2() {
+	public void p1Jdk18p2() {
 		// 配列から
-		Arrays.stream(msg.split(" +"))
+		Arrays.stream(MSG.split(" +"))
 				.sorted((a, b) -> a.compareTo(b))
-				.map(s -> String.format("\"%s\"", s))
-				.forEach(System.out::println);
+				.map(s -> String.format(FORMAT, s))
+				.forEach(Print::println);
 	}
-	public void p1_jdk18_3() {
+	public void p1Jdk18p3() {
 		// コレクションから
-		List<String> list = Arrays.asList(msg.split(" +"));
+		List<String> list = Arrays.asList(MSG.split(" +"));
 		list.stream()
 				.sorted((a, b) -> a.compareTo(b))
-				.map(s -> String.format("\"%s\"", s))
-				.forEach(System.out::println);
+				.map(s -> String.format(FORMAT, s))
+				.forEach(Print::println);
 	}
-	public void p1_jdk18_4() {
+	public void p1Jdk18p4() {
 		// Readerから
 		try (
 				PipedReader ppr = new PipedReader();
@@ -53,17 +55,16 @@ public class StreamSupplier {
 				BufferedReader br = new BufferedReader(ppr);
 				)
 		{
-			Arrays.stream(msg.split(msg)).forEach(pw::println);
+			Arrays.stream(MSG.split(" +")).forEach(pw::println);
 			pw.flush();
-			pw.close();
 
 			br.lines()
 					.sorted((a, b) -> a.compareTo(b))
-					.map(s -> String.format("\"%s\"", s))
-					.forEach(System.out::println);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+					.map(s -> String.format(FORMAT, s))
+					.forEach(Print::println);
+		}
+		catch (IOException e) {
+			Print.stackTrace(e);
 		}
 	}
 
@@ -71,10 +72,10 @@ public class StreamSupplier {
 	public static void main(String... arvs) {
 		StreamSupplier stream = new StreamSupplier();
 
-		Print.print(stream, "p1_jdk18");
-		Print.print(stream, "p1_jdk18_2");
-		Print.print(stream, "p1_jdk18_3");
-		Print.print(stream, "p1_jdk18_4");
+		Print.print(stream, "p1Jdk18");
+		Print.print(stream, "p1Jdk18p2");
+		Print.print(stream, "p1Jdk18p3");
+		Print.print(stream, "p1Jdk18p4");
 	}
 
 }

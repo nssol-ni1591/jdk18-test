@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import util.Print;
+
 /**
  * 条件に合う文字列の有無を確認する際の処理速度の比較
  * 
@@ -14,6 +16,8 @@ import java.util.stream.Stream;
  *
  */
 public class MatchString {
+
+	private static final String RESULT = " ms, result=";
 
 //	private static final String COND = "153.156.73.80"
 	private static final String COND = "08:32:52";
@@ -28,11 +32,9 @@ public class MatchString {
 				Optional<String> rc = stream.sequential().filter(s -> s.contains(COND)).findFirst();
 				result = rc.isPresent();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Print.stackTrace(e);
 			}
 		}
-//		System.out.println(
-//				"findFirst + serial   => elaps=" + (System.currentTimeMillis() - time) + " ms, result=" + result);
 
 		time = System.currentTimeMillis();
 		for (int ix = 0; ix < 100; ix++) {
@@ -40,11 +42,11 @@ public class MatchString {
 				Optional<String> rc = stream.sequential().filter(s -> s.contains(COND)).findFirst();
 				result = rc.isPresent();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Print.stackTrace(e);
 			}
 		}
-		System.out.println(
-				"findFirst + serial   => elaps=" + (System.currentTimeMillis() - time) + " ms, result=" + result);
+		Print.println(
+				"findFirst + serial   => elaps=" + (System.currentTimeMillis() - time) + RESULT + result);
 
 		time = System.currentTimeMillis();
 		for (int ix = 0; ix < 100; ix++) {
@@ -52,11 +54,11 @@ public class MatchString {
 				Optional<String> rc = stream.parallel().filter(s -> s.contains(COND)).findFirst();
 				result = rc.isPresent();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Print.stackTrace(e);
 			}
 		}
-		System.out.println(
-				"findFirst + parallel => elaps=" + (System.currentTimeMillis() - time) + " ms, result=" + result);
+		Print.println(
+				"findFirst + parallel => elaps=" + (System.currentTimeMillis() - time) + RESULT + result);
 
 		time = System.currentTimeMillis();
 		for (int ix = 0; ix < 100; ix++) {
@@ -64,11 +66,11 @@ public class MatchString {
 				Optional<String> rc = stream.parallel().filter(s -> s.contains(COND)).findAny();
 				result = rc.isPresent();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Print.stackTrace(e);
 			}
 		}
-		System.out.println(
-				"findAny   + parallel => elaps=" + (System.currentTimeMillis() - time) + " ms, result=" + result);
+		Print.println(
+				"findAny   + parallel => elaps=" + (System.currentTimeMillis() - time) + RESULT + result);
 
 		time = System.currentTimeMillis();
 		for (int ix = 0; ix < 100; ix++) {
@@ -76,11 +78,11 @@ public class MatchString {
 				boolean rc = stream.sequential().anyMatch(s -> s.contains(COND));
 				result = rc;
 			} catch (IOException e) {
-				e.printStackTrace();
+				Print.stackTrace(e);
 			}
 		}
-		System.out.println(
-				"anyMatch  + serial   => elaps=" + (System.currentTimeMillis() - time) + " ms, result=" + result);
+		Print.println(
+				"anyMatch  + serial   => elaps=" + (System.currentTimeMillis() - time) + RESULT + result);
 
 		time = System.currentTimeMillis();
 		for (int ix = 0; ix < 100; ix++) {
@@ -88,11 +90,11 @@ public class MatchString {
 				boolean rc = stream.parallel().anyMatch(s -> s.contains(COND));
 				result = rc;
 			} catch (IOException e) {
-				e.printStackTrace();
+				Print.stackTrace(e);
 			}
 		}
-		System.out.println(
-				"anyMatch  + parallel => elaps=" + (System.currentTimeMillis() - time) + " ms, result=" + result);
+		Print.println(
+				"anyMatch  + parallel => elaps=" + (System.currentTimeMillis() - time) + RESULT + result);
 
 	}
 }

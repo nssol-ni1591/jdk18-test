@@ -9,6 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+import util.Print;
+
 /*
  * 新しい java.nio パッケージの確認
  */
@@ -20,79 +22,75 @@ public class FileAPI {
 	 */
 	private void print(Path path) throws IOException {
 		try (Stream<Path> stream = Files.list(path)) {
-			stream.forEach(System.out::println);
+			stream.forEach(Print::println);
 		}
 	}
 
 	public static void main(String... args) {
 		Path path = Paths.get(".");
 
-		System.out.println("path = " + path);
-		System.out.println("absoulte path = " + path.toAbsolutePath());
-		path.iterator().forEachRemaining(System.out::println);
-		path.forEach(System.out::println);
+		Print.println("path = " + path);
+		Print.println("absoulte path = " + path.toAbsolutePath());
+		path.iterator().forEachRemaining(Print::println);
+		path.forEach(Print::println);
 
-		System.out.println("---- Files.list ----");
+		Print.println("---- Files.list ----");
 		FileAPI f = new FileAPI();
 		try {
 			f.print(path);
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			Print.stackTrace(e);
 		}
 
 		Path readme = path.resolve("README.md");
-		{
-			System.out.println("---- dump (jdk1.6以前) ----");
-			try (BufferedReader br = new BufferedReader(new FileReader(readme.toFile()))) {
-				String s;
-				while ((s = br.readLine()) != null) {
-					System.out.println(s);
-				}
-			}
-			catch (IOException e) {
-				e.printStackTrace();
+
+		Print.println("---- dump (jdk1.6以前) ----");
+		try (BufferedReader br = new BufferedReader(new FileReader(readme.toFile()))) {
+			String s;
+			while ((s = br.readLine()) != null) {
+				Print.println(s);
 			}
 		}
-		{
-			System.out.println("---- dump (jdk1.7:Resource-try) ----");
-			try (BufferedReader br = new BufferedReader(new FileReader(readme.toFile()))) {
-				String s;
-				while ((s = br.readLine()) != null) {
-					System.out.println(s);
-				}
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		{
-			// readAllLinesはファイルを全部読みこんでしまうので、サイズの大きなファイルには向かない
-			System.out.println("---- dump (jdk1.8 その1) ----");
-			try {
-				Files.readAllLines(readme, StandardCharsets.UTF_8).forEach(System.out::println);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		{
-			// ファイルサイズがわからないならば、こちら
-			System.out.println("---- dump (jdk1.8 その2) ----");
-			try (Stream<String> stream = Files.lines(readme, StandardCharsets.UTF_8)) {
-				stream.forEach(System.out::println);
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
+		catch (IOException e) {
+			Print.stackTrace(e);
 		}
 
-		System.out.println("---- path api ----");
-		{
-			Path p = Paths.get("a", "b", "cee"); // line n1
-			System.out.println(p);
-			System.out.println(p.endsWith(Paths.get("b", "cee")));
-			System.out.println(p.endsWith(Paths.get("ee")));
+		Print.println("---- dump (jdk1.7:Resource-try) ----");
+		try (BufferedReader br = new BufferedReader(new FileReader(readme.toFile()))) {
+			String s;
+			while ((s = br.readLine()) != null) {
+				Print.println(s);
+			}
 		}
+		catch (IOException e) {
+			Print.stackTrace(e);
+		}
+
+		// readAllLinesはファイルを全部読みこんでしまうので、サイズの大きなファイルには向かない
+		Print.println("---- dump (jdk1.8 その1) ----");
+		try {
+			Files.readAllLines(readme, StandardCharsets.UTF_8).forEach(Print::println);
+		}
+		catch (IOException e) {
+			Print.stackTrace(e);
+		}
+
+		// ファイルサイズがわからないならば、こちら
+		Print.println("---- dump (jdk1.8 その2) ----");
+		try (Stream<String> stream = Files.lines(readme, StandardCharsets.UTF_8)) {
+			stream.forEach(Print::println);
+		}
+		catch (IOException e) {
+			Print.stackTrace(e);
+		}
+
+
+		Print.println("---- path api ----");
+		Path p = Paths.get("a", "b", "cee"); // line n1
+		Print.println(p);
+		Print.println(p.endsWith(Paths.get("b", "cee")));
+		Print.println(p.endsWith(Paths.get("ee")));
 	}
 
 }

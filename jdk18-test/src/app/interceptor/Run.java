@@ -3,6 +3,8 @@ package app.interceptor;
 import java.util.Arrays;
 import java.util.List;
 
+import util.Print;
+
 @PrintCall
 public class Run<T extends List<? extends String>> implements RunIF<T> {
 
@@ -12,13 +14,13 @@ public class Run<T extends List<? extends String>> implements RunIF<T> {
 	 * 以下はラムダ式というよりも、リフレクションと総称型をうまく使ってコードを汎用化できないか？
 	 */
 	/*
-	public ArrayList<? extends String> p3_jdk18(ArrayList<? extends String> list) {
-		System.out.println("ArrayList<? extends String> p3_jdk18(ArrayList<? extends String> list)");
-		list.sort((a, b) -> {
-			return a.compareToIgnoreCase(b);
-		});
-		return list;
-	}
+	public ArrayList<? extends String> p3_jdk18(ArrayList<? extends String> list) {				-
+		Print.println("ArrayList<? extends String> p3_jdk18(ArrayList<? extends String> list)");-
+		list.sort((a, b) -> {																	-
+			return a.compareToIgnoreCase(b);													-
+		});																						-
+		return list;																			-
+	}																							-
 	*/
 
 	/*
@@ -30,45 +32,36 @@ public class Run<T extends List<? extends String>> implements RunIF<T> {
 	//@AnnotationTest.MethodAnnotation
 	// ⇒Intercepterの呼び出しは、interfaceからproxy	クラスが生成されるのでclass側に設定されていても無意味
 	@Override
-	public T p3_jdk18(T list) {
-		System.out.println("call \"p3_jdk18(T list)\"");
-		list.sort((a, b) -> {
-			return a.length() - b.length();
-		});
+	public T p3Jdk18(T list) {
+		Print.println("call \"p3Jdk18(T list)\"");
+		list.sort((a, b) -> a.length() - b.length());
 		return list;
 	}
 
 	@Override
-	public List<? extends String> p4_jdk18(List<? extends String> list) {
-		System.out.println("call \"p4_jdk18(List<? extends String> list)\"");
-		list.sort((a, b) -> {
-			return a.length() - b.length();
-		});
+	public List<? extends String> p4Jdk18(List<? extends String> list) {
+		Print.println("call \"p4Jdk18(List<? extends String> list)\"");
+		list.sort((a, b) -> a.length() - b.length());
 		return list;
 	}
 
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		String[] array = msg.split(" +");
 		final List<String> list = Arrays.asList(array);
+		RunIF<List<String>> targetClass;
 
-		{
-			System.out.println("--------");
-			System.out.println(">>>> p3_jdk18 (@AnnotationTest あり)");
+		Print.println();
+		Print.println(">>>> p3Jdk18 (@AnnotationTest あり)");
+		targetClass = Interceptor.getProxyInstance(new Run<List<String>>()); // この記述をなくしたい
+		targetClass.p3Jdk18(list);
+		Print.println("<<<< p3Jdk18 (Interceptor) end");
 
-			RunIF<List<String>> targetClass = Interceptor.getProxyInstance(new Run<List<String>>()); // この記述をなくしたい
-			targetClass.p3_jdk18(list);
-			System.out.println("<<<< p3_jdk18 (Interceptor) end");
-		}
-		{
-			System.out.println("--------");
-			System.out.println(">>>> p4_jdk18 (@AnnotationTest　なし)");
-
-			RunIF<List<String>> targetClass = Interceptor.getProxyInstance(new Run<List<String>>()); // この記述をなくしたい
-			targetClass.p4_jdk18(list);
-			System.out.println("<<<< p4_jdk18 (Interceptor) end");
-		}
+		Print.println();
+		Print.println(">>>> p4Jdk18 (@AnnotationTest　なし)");
+		targetClass = Interceptor.getProxyInstance(new Run<List<String>>()); // この記述をなくしたい
+		targetClass.p4Jdk18(list);
+		Print.println("<<<< p4Jdk18 (Interceptor) end");
 	}
 
 }

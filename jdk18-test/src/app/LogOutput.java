@@ -8,6 +8,7 @@ import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.inject.Inject;
 
+import util.Print;
 import util.logging.StdErr;
 import util.logging.StdOut;
 
@@ -18,6 +19,7 @@ public class LogOutput {
 	@Inject @StdErr private Logger err;
 
 	public LogOutput() {
+		// Do nothing
 	}
 	
 	public void run() {
@@ -49,7 +51,7 @@ public class LogOutput {
 			application.run();
 	    }
 		catch (Exception ex) {
-			System.err.println(ex);
+			Print.stackTrace(ex);
 		}
 	}
 }

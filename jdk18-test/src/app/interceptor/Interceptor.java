@@ -6,42 +6,44 @@ import java.lang.reflect.Proxy;
 import java.util.Arrays;
 
 import app.interceptor.PrintCall.MethodAnnotation;
+import util.Print;
 
 
 public class Interceptor implements InvocationHandler {
 
-    private Object target;
+	private Object target;
 
-    public Interceptor(Object target) {
-        this.target = target;
-    }
+	public Interceptor(Object target) {
+		this.target = target;
+	}
 
-    @Override
+	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		// TODO Auto-generated method stub
 
-    	System.out.println("called Intercepter.invoke");
+		Print.println("called Intercepter.invoke");
 
-    	enter(method, args);
+		enter(method, args);
 
-    	// 実際のコードを呼び出し
+		// 実際のコードを呼び出し
 		Object result = method.invoke(target, args);
 
 		leave(method, result);
 
 		// 実施した結果を返し、通常の実施を同じにする
 		return result;
-    }
-    
-    private void enter(Method method, Object[] args) {
+	}
+
+	private void enter(Method method, Object[] args) {
 
 		// 以下、MethodAnnotationアノテーションがついているメソッドは、処理を追加する
-		System.out.println("AOP処理開始:");
+		Print.println("start AOP: " + method.getName());
 
 		// MethodAnnotationアノテーションがついていないメソッドは、追加処理せず、終了。
-		Arrays.stream(method.getAnnotations()).forEach(x -> System.out.println(x));
+		Arrays.stream(method.getAnnotations()).forEach(Print::println);
 		// 実装クラス側ではなく、interface側のメソッドにAnnotationを付加する
-		if (!Arrays.stream(method.getAnnotations()).anyMatch(p -> p instanceof MethodAnnotation)) {
+
+		// "Stream" call chains should be simplified when possible 
+		if (Arrays.stream(method.getAnnotations()).noneMatch(p -> p instanceof MethodAnnotation)) {
 			return;
 		}
 
@@ -51,18 +53,18 @@ public class Interceptor implements InvocationHandler {
 			Arrays.stream(args).forEach(arg -> sb.append(arg.toString()).append(" "));
 		}
 		// メソッド名と引数を出力
-		System.out.println("呼び出しメソッド:" + method.getName() + " 引数:" + sb.toString());
+		Print.println("source method:" + method.getName() + ", param:" + sb.toString());
 		// 実際に実施し、結果を保存する
-    }
-    
-    private void leave(Method method, Object result) {
+	}
+
+	private void leave(Method method, Object result) {
 
 		// AOPの処理が完了したことを出力。空行も出力。
-		System.out.println("AOP処理完了:");
+		Print.println("end AOP: " + method.getName());
 
 		// 結果がnullでなければ、結果を出力する
 		if (result != null) {
-			System.out.println("結果:" + result.toString());
+			Print.println("result:" + result.toString());
 		}
 	}
 

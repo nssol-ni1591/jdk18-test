@@ -4,16 +4,33 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Stream;
 
+import util.Print;
+
 public class Passwd {
 
-	public static long SEED = 19610802;
+	private static final long SEED = 19610802;
+	private static final String[] PW_REQUIRE1 = {
+			"[\\w!?#$%&~^:;|=+*/-]+", // 使用可能な文字
+			".*[A-Z].*", // 英大文字必須
+			".*[a-z].*", // 英子文字必須
+			".*[0-9].*", // 数字必須
+			".*[!?#$%&~^:;|=+*/-].*", // 記号必須
+			"(?!.*(.).*\\1).+" // 重複排除
+	};
+	private static final String[] PW_REQUIRE2 = {
+			"\\w+",		// 使用可能な文字
+			"[^_]+"
+	};
 
+	private static final String MSG_LEN_EQ_20 = "パスワード要件： 20文字であること";
+	private static final String MSG_ATTR_LITTLE = "パスワード要件： 英数字のみ、8文字";
+	private static final String MSG_COMBINATION = "パスワード要件： 組み合わせ";
 
 	/*
 	 * patterns の正規化表現はAND条件 ... 当たり前だが
 	 */
-	public static Optional<String> passgen(int len, String... patterns) {
-		// Random random = new Random(System.currentTimeMillis());
+	// 事前に10000個のパスワードを組み立てて、その中から条件に合うパスワードを拾いだすパターン
+	public static String passgen(int len, String... patterns) {
 		Random random = new Random(SEED);
 		Stream<String> stream = Stream.generate(() -> new String(random.ints('!', '~' + 1)
 				.limit(len)
@@ -30,11 +47,12 @@ public class Passwd {
 		}
 
 		// 最初にすべてのテストをパスした文字列を返す
-		return stream.findFirst();
+		Optional<String> pw = stream.findFirst();
+		return pw.isPresent() ? pw.get() : null;
 	}
 
-	public static Optional<String> passgen2(int len, String... patterns) {
-		// Random random = new Random(System.currentTimeMillis());
+	// もう少し効率をよくしたパターン
+	public static String passgen2(int len, String... patterns) {
 		Random random = new Random(SEED);
 		Optional<String> pw = Stream.generate(() -> new String(random.ints('!', '~' + 1)
 				.limit(len)
@@ -47,11 +65,11 @@ public class Passwd {
 					return true;
 				})
 				.findFirst();
-		return pw;
+		return pw.isPresent() ? pw.get() : null;
 	}
 
-	public static Optional<String> passgen3(int len, String... patterns) {
-		// Random random = new Random(System.currentTimeMillis());
+	// パスワード要件にallMatch()を使用した場合
+	public static String passgen3(int len, String... patterns) {
 		Random random = new Random(SEED);
 		Optional<String> pw = Stream.generate(() -> new String(random.ints('!', '~' + 1)
 				.limit(len)
@@ -59,7 +77,7 @@ public class Passwd {
 				.filter(s -> Stream.of(patterns)
 						.allMatch(s::matches))
 				.findFirst();
-		return pw;
+		return pw.isPresent() ? pw.get() : null;
 	}
 
 	public static void main(String[] args) {
@@ -68,72 +86,59 @@ public class Passwd {
 		 * Generate passgen()
 		 */
 		// 20文字であること
-		System.out.println(passgen(20).get());
-		// System.out.println(passgen(8).get());
-		// CEIJC'Hvd{&C9@!,T][7
+		Print.println(MSG_LEN_EQ_20);
+		Print.println(passgen(20));
 
 		// 英数字のみ、8文字
-		System.out.println(passgen(8, "\\w+", "[^_]+").get());
+		Print.println(MSG_ATTR_LITTLE);
+		Print.println(passgen(8, PW_REQUIRE2));
 		// 5cPvpSXd
 
 		// 組み合わせ
-		System.out.println(passgen(8, // 8文字
-				"[\\w!?#$%&~^:;|=+*/-]+", // 使用可能な文字
-				".*[A-Z].*", // 英大文字必須
-				".*[a-z].*", // 英子文字必須
-				".*[0-9].*", // 数字必須
-				".*[!?#$%&~^:;|=+*/-].*", // 記号必須
-				"(?!.*(.).*\\1).+" // 重複排除
-		).get());
-		// /|DsG9^!
+		Print.println(MSG_COMBINATION);
+		Print.println(passgen(20, PW_REQUIRE1));
+
+		Print.println();
 
 		/*
 		 * Generate passgen2()
 		 */
 		// 20文字であること
-		System.out.println(passgen2(20).get());
-		// CEIJC'Hvd{&C9@!,T][7
+		Print.println(MSG_LEN_EQ_20);
+		Print.println(passgen2(20));
 
 		// 英数字のみ、8文字
-		System.out.println(passgen2(8, "\\w+", "[^_]+").get());
+		Print.println(MSG_ATTR_LITTLE);
+		Print.println(passgen2(8, PW_REQUIRE2));
 		// 5cPvpSXd
 
 		// 組み合わせ
-		System.out.println(passgen2(8, // 8文字
-				"[\\w!?#$%&~^:;|=+*/-]+", // 使用可能な文字
-				".*[A-Z].*", // 英大文字必須
-				".*[a-z].*", // 英子文字必須
-				".*[0-9].*", // 数字必須
-				".*[!?#$%&~^:;|=+*/-].*", // 記号必須
-				"(?!.*(.).*\\1).+" // 重複排除
-		).get());
-		// /|DsG9^!
+		Print.println(MSG_COMBINATION);
+		Print.println(passgen2(20, PW_REQUIRE1));
+
+		Print.println();
 
 		/*
 		 * Generate passgen3()
 		 */
 		// 20文字であること
-		System.out.println(passgen3(20).get());
-		System.out.println(passgen3(8).get());
+		Print.println(MSG_LEN_EQ_20);
+		Print.println(passgen3(20));
+		Print.println(passgen3(8));
 		// CEIJC'Hvd{&C9@!,T][7
 
 		// 英数字のみ、8文字
-		System.out.println(passgen3(8, "\\w+", "[^_]+").get());
+		Print.println(MSG_ATTR_LITTLE);
+		Print.println(passgen3(8, PW_REQUIRE2));
 		// 5cPvpSXd
 
 		// 組み合わせ
-		System.out.println(passgen3(8, // 8文字
-				"[\\w!?#$%&~^:;|=+*/-]+", // 使用可能な文字
-				".*[A-Z].*", // 英大文字必須
-				".*[a-z].*", // 英子文字必須
-				".*[0-9].*", // 数字必須
-				".*[!?#$%&~^:;|=+*/-].*", // 記号必須
-				"(?!.*(.).*\\1).+" // 重複排除
-		).get());
-		// /|DsG9^!
+		Print.println(MSG_COMBINATION);
+		Print.println(passgen3(20, PW_REQUIRE1));
 
 		// No.12 を有効にしてみる
-		System.out.println(passgen3(8, "[\\w\\(]+").get());
+		Print.println("パスワード要件： 英数字+(、8文字");
+		Print.println(passgen3(8, "[\\w\\(]+"));
 		// 5cPvpSXd
 	}
 

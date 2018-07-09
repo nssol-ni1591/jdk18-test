@@ -13,7 +13,7 @@ import util.Print;
 /*
  * ラムダ式
  */
-public class LambdaSort<T extends List<? extends String>> {
+public class LambdaSort {
 
 	static String msg = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFSの同期処理 を開始します。 +++++";
 
@@ -31,6 +31,7 @@ public class LambdaSort<T extends List<? extends String>> {
 	 * 単に、配列に対して、ソートする実装方法
 	 */
 	public String[] p1Jdk17(String[] array) {
+		// jdk1.7ベースなので敢えてinnerクラスを生成する
 		Arrays.sort(array, new Comparator<String>() {
 			@Override
 			public int compare(String a, String b) {
@@ -70,6 +71,7 @@ public class LambdaSort<T extends List<? extends String>> {
 	}
 	public String[] p1Jdk18p9(String[] array) {
 		Arrays.sort(array, new Comparator<String>() {
+			@Override
 			public int compare(String o1, String o2) {
 				return -1;
 			}
@@ -82,24 +84,20 @@ public class LambdaSort<T extends List<? extends String>> {
 	 */
 	public String[] p2Jdk18(String[] array) {
 		// 文字数でソート
-		Arrays.sort(array, (a, b) -> {
-			return a.length() - b.length();
-		});
+		Arrays.sort(array, (a, b) -> a.length() - b.length());
 		return array;
 	}
 
 	public String[] p2Jdk18p2(String[] array) {
 		// バイト数でソート
-		Arrays.sort(array, (a, b) -> {
-			return a.getBytes().length - b.getBytes().length;
-		});
+		Arrays.sort(array, (a, b) -> a.getBytes().length - b.getBytes().length);
 		return array;
 	}
 
 
 	public static void main(String... args) {
 		String[] array = msg.split(" +");
-		LambdaSort<List<String>> m = new LambdaSort<List<String>>();
+		LambdaSort m = new LambdaSort();
 
 		Print.array(m, "p1Jdk1x", array);
 		Print.array(m, "p1Jdk1y", array);
@@ -117,57 +115,41 @@ public class LambdaSort<T extends List<? extends String>> {
 
 		Print.array(m, "p2Jdk18", array);
 
-		/*
-		 * 出力をかっこよく出力したい：：
-		 * ラムダ式というより、StreamAPIになってしまった
-		 */
-		Stream.of(Print.print(m, "p2Jdk18p2", array)).forEach(System.out::println);
-		System.out.println();
 
-		// 上の実装でもいいけれど、可能ならばもっとスマートな実装はないものか？
-		Stream.concat(Stream.of(Print.print(m, "p2Jdk18p2", array)), Stream.of("-")).forEach(System.out::println);
 
-		Stream.concat(Arrays.stream(Print.print(m, "p2Jdk18p2", array)), Stream.of("--")).forEach(System.out::println);
+		Print.println();
+		Print.println("----- Convert array to list -----");
 
-		Stream<String> stream = Arrays.stream(Print.print(m, "p2Jdk18p2", array));
-		Stream.concat(stream, Stream.of("---")).forEach(System.out::println);
+		Print.println();
+		Print.println(">>>> (1) forEach()で空のListに要素を積む");
+		final ArrayList<String> list = new ArrayList<>();
+		Stream.of(array).forEach(list::add);
+		//Print.list(m, "p3Jdk18", list)
+		Print.println(list);
 
-		
-		System.out.println();
-		System.out.println("----- Convert array to list -----");
-		{
-			System.out.println();
-			System.out.println(">>>> (1) forEach()で空のListに要素を積む");
 
-			final ArrayList<String> list = new ArrayList<>();
-			Stream.of(array).forEach(s -> list.add(s));
-			Print.list(m, "p3Jdk18", list);
-		}
-		{
-			System.out.println();
-			System.out.println(">>>> (2)　colloct()を使用してStreamをListに変換する (一般的な手法)");
+		Print.println();
+		Print.println(">>>> (2)　colloct()を使用してStreamをListに変換する (一般的な手法)");
+		final List<String> list2 = Stream.of(array).collect(Collectors.toList());
+		//Print.list(m, "p3Jdk18", list)
+		Print.println(list2);
 
-			final List<String> list = Stream.of(array).collect(Collectors.toList());
-			Print.list(m, "p3Jdk18", list);
-		}
+		Print.println();
+		Print.println(">>>> (3) 配列をListに変換することは可能だが、"
+				+ "asList()の返却値(Arrays$ArrayList)を引数として定義しているメソッド：p3_jdk18をリフレクションで探し出すことができない？");
+		// asListで生成されるクラスは、[private static java.util.Arrays$ArrayList]なので、
+		// 直接参照することができない
+		final List<String> list3 = Arrays.asList(array);
+		//Print.list(m, "p3Jdk18", list)
+		Print.println(list3);
 
-		{
-			System.out.println();
-			System.out.println(">>>> (3) 配列をListに変換することは可能だが、"
-					+ "asList()の返却値(Arrays$ArrayList)を引数として定義しているメソッド：p3_jdk18をリフレクションで探し出すことができない？");
-			// asListで生成されるクラスは、[private static java.util.Arrays$ArrayList]なので、
-			// 直接参照することができない
-			final List<String> list = Arrays.asList(array);
-			Print.list(m, "p3Jdk18", list);
-		}
-		{
-			System.out.println();
-			System.out.println(">>>> (4) 配列をListに変換することは可能だが、asList()の返却値をArrayLlistに変換すればOK？");
-			// asListで生成されるクラスは、[private static java.util.Arrays$ArrayList]なので、
-			// 直接参照することができない
-			final List<String> list = new ArrayList<String>(Arrays.asList(array));
-			Print.list(m, "p3Jdk18", list);
-		}
+		Print.println();
+		Print.println(">>>> (4) 配列をListに変換することは可能だが、asList()の返却値をArrayLlistに変換すればOK？");
+		// asListで生成されるクラスは、[private static java.util.Arrays$ArrayList]なので、
+		// 直接参照することができない
+		final List<String> list4 = new ArrayList<>(Arrays.asList(array));
+		//Print.list(m, "p3Jdk18", list)
+		Print.println(list4);
 	}
 
 }

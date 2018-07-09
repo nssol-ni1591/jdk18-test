@@ -20,8 +20,8 @@ public class Validator {
 		return pattern;
 	}
 	/*
-	public int length(String s) {
-		return strategy.length(s);
-	}
+	public int length(String s) {	-
+		return strategy.length(s);	-
+	}								-
 	*/
 }

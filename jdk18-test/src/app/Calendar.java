@@ -5,13 +5,18 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.stream.Stream;
 
+import util.Print;
+
 import static java.time.temporal.TemporalAdjusters.*;
 
 import java.time.DayOfWeek;
 
 public class Calendar {
 
-	public Calendar() { }
+	public Calendar() {
+		// Do nothing
+	}
+
 	public void print() {
 		// 今月の第１週の日曜日を取得する。
 		LocalDate start = LocalDate.now()
@@ -22,8 +27,8 @@ public class Calendar {
 			.limit(7) // 1週間分の要素で打ち切る
 			.map(d -> d.getDisplayName(TextStyle.SHORT_STANDALONE, Locale.US))
 			.map(s -> s + " ")
-			.forEach(System.out::print);
-		System.out.println();
+			.forEach(Print::print);
+		Print.println();
 
 		/*
 		 * generate()、iterate()、builder()は、データ列からではなくロジックで Stream を生成する。
@@ -45,17 +50,12 @@ public class Calendar {
 					}
 					switch (d.getDayOfWeek()) {
 					case SATURDAY:
-						return day += "\n"; // 土曜日なら改行
+						return day += System.lineSeparator(); // 土曜日なら改行
 					default:
 						return day;
 					}
-					/*
-				}).forEach(s -> {
-					System.out.print(s);
-				});
-				*/
 				})
-				.forEach(System.out::print);
+				.forEach(Print::print);
 }
 
 	public static void main(String[] args) {

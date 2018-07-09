@@ -1,7 +1,9 @@
 package scope;
 
-import org.jboss.weld.environment.se.Weld;
-import org.jboss.weld.environment.se.WeldContainer;
+import javax.enterprise.inject.se.SeContainer;
+import javax.enterprise.inject.se.SeContainerInitializer;
+
+import util.Print;
 
 public class Run {
 
@@ -10,16 +12,15 @@ public class Run {
 		System.setProperty("file.encoding", "UTF-8");
 
 		int rc = 0;
-		Weld weld = new Weld();
-		try (WeldContainer container = weld.initialize()) {
-			ScopeWeld app = container.instance().select(ScopeWeld.class).get();
+		try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
+			ScopeWeld app = container.select(ScopeWeld.class).get();
 			app.start();
 
-			ScopeWeld app2 = container.instance().select(ScopeWeld.class).get();
+			ScopeWeld app2 = container.select(ScopeWeld.class).get();
 			app2.start();
 		}
 		catch (Exception ex) {
-			ex.printStackTrace(System.err);
+			Print.stackTrace(ex);
 			rc = 1;
 		}
 		System.exit(rc);

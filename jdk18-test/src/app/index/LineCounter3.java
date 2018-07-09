@@ -1,4 +1,4 @@
-package util.index;
+package app.index;
 
 import java.util.AbstractMap;
 
@@ -11,7 +11,7 @@ import java.util.AbstractMap;
 public class LineCounter3<T> {
 
 	private int max = 0;
-	private String format = null;;
+	private String format = null;
 
 	public LineCounter3() {
 	}
@@ -21,7 +21,7 @@ public class LineCounter3<T> {
 	}
 
 	public WithIndex<Integer, T> apply(T arg0) {
-		return new WithIndex<Integer, T>(nextIndex(), arg0);
+		return new WithIndex<>(nextIndex(), arg0);
 	}
 
 	private synchronized int nextIndex() {

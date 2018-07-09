@@ -11,13 +11,7 @@ public class WithIndex<T> {
 	private int max = 0;
 	
 	public Function<T, ValWithIndex<T>> withIndex() {
-		return new Function<T, ValWithIndex<T>>() {
-
-			@Override
-			public ValWithIndex<T> apply(T t) {
-				return new ValWithIndex<>(t, nextIndex());
-			}
-		};
+		return t -> new ValWithIndex<>(t, nextIndex());
 	}
 	private synchronized int nextIndex() {
 		return ++max;

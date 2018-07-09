@@ -4,7 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MapTest {
+import util.Print;
+
+public class MapComputeIf {
+	
+	private static final String BEFORE = "before: ";
+	private static final String AFTER = "after: ";
 
 	/*
 	 * compute(K key, BiFunction<? super K,? super V,? extends V> remappingFunction)
@@ -14,18 +19,18 @@ public class MapTest {
 	 * remappingFunction が null を返した場合、そのキーのエントリは削除される。
 	 */
 	public void test01() {
-		System.out.println("[test01]");
+		Print.println("[test01]");
 
 		Map<String, String> map = new HashMap<>();
         map.put("hoge", "HOGE");
         map.put("fuga", "FUGA");
         map.put("piyo", "PIYO");
 
-        System.out.println("before : " + map);
+        Print.println(BEFORE + map);
         map.compute("hoge", (key, old) -> "<" + old + ">");	// null以外 -> 置換
         map.compute("fuga", (key, old) -> null);			// null -> 削除
         map.compute("fizz", (key, old) -> "FIZZ");			// キーがない -> 追加
-        System.out.println("after : " + map);
+        Print.println(AFTER + map);
 	}
 	/*
 	 * computeIfAbsent(K key, Function<? super K,? extends V> mappingFunction)
@@ -37,20 +42,20 @@ public class MapTest {
 	 * ConcurrentHashMap の computeIfAbsent() は同期するようにデフォルトメソッドをオーバーライドしており、そのことが API ドキュメントに明記されている。
 	 */
 	public void test02() {
-		System.out.println("[test02]");
+		Print.println("[test02]");
 
 		Map<String, String> map = new TreeMap<>();
         map.put("hoge", "HOGE");
         map.put("fuga", "FUGA");
         map.put("piyo", "PIYO");
 
-        System.out.println("before : " + map);
-        map.computeIfAbsent("hoge", (key) -> null /*ここは実行されない*/);	// キーが存在 -> nullなので実行されない
-        map.computeIfAbsent("fuga", (key) -> "FUGA");					// キーが存在 -> null以外でも値を更新しない
-        map.computeIfAbsent("fuga", (key) -> map.put("piyo", "<FUGA>"));// キーが存在 -> null以外でも式を実行しない
-        map.computeIfAbsent("fizz", (key) -> "FIZZ");					// キーが存在しない -> fixx:FIZZが登録
-        map.computeIfAbsent("nana", (key) -> null);						// キーが存在しない -> 何も変化しない
-        System.out.println("after : " + map);
+        Print.println(BEFORE + map);
+        map.computeIfAbsent("hoge", key -> null /*ここは実行されない*/);	// キーが存在 -> nullなので実行されない
+        map.computeIfAbsent("fuga", key -> "FUGA");					// キーが存在 -> null以外でも値を更新しない
+        map.computeIfAbsent("fuga", key -> map.put("piyo", "<FUGA>"));// キーが存在 -> null以外でも式を実行しない
+        map.computeIfAbsent("fizz", key -> "FIZZ");					// キーが存在しない -> fixx:FIZZが登録
+        map.computeIfAbsent("nana", key -> null);						// キーが存在しない -> 何も変化しない
+        Print.println(AFTER + map);
 	}
 	/*
 	 * computeIfPresent(K key, BiFunction<? super K,? super V,? extends V> remappingFunction)
@@ -60,41 +65,40 @@ public class MapTest {
 	 * remappingFunction が null を返した場合、そのキーのエントリは削除される。
 	 */
 	public void test03() {
-		System.out.println("[test03]");
+		Print.println("[test03]");
 		
         Map<String, String> map = new HashMap<>();
         map.put("hoge", "HOGE");
         map.put("fuga", "FUGA");
         map.put("piyo", "PIYO");
 
-        System.out.println("before : " + map);
+        Print.println(BEFORE + map);
         map.computeIfPresent("hoge", (key, old) -> "<" + old + ">");
         map.computeIfPresent("fuga", (key, old) -> null);
         map.computeIfPresent("fizz", (key, old) -> "FIZZ" /*ここは実行されない*/);
-        System.out.println("after : " + map);
+        Print.println(AFTER + map);
 	}
 	
-	public void test04_1(Map<String, Map<String, Map<String, Map<String, String>>>> map1, String m) {
+	public void test04a(Map<String, Map<String, Map<String, Map<String, String>>>> map1, String m) {
 		Map<String, Map<String, Map<String, String>>> map2 = map1.computeIfAbsent(m, key -> new TreeMap<>());
 		Map<String, Map<String, String>> map3 = map2.computeIfAbsent(m, key -> new TreeMap<>());
 		Map<String, String> map4 = map3.computeIfAbsent(m, key -> new TreeMap<>());
 		map4.put(m, m);
 	}
 	public void test04() {
-		System.out.println("[test04]");
+		Print.println("[test04]");
 
         Map<String, Map<String, Map<String, Map<String, String>>>> map1 = new TreeMap<>();
 
-        System.out.println("before : " + map1);
-        test04_1(map1, "abc1");
-        test04_1(map1, "abc2");
-        test04_1(map1, "abc3");
-        System.out.println("after : " + map1);
+        Print.println(BEFORE + map1);
+        test04a(map1, "abc1");
+        test04a(map1, "abc2");
+        test04a(map1, "abc3");
+        Print.println(AFTER + map1);
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		MapTest test = new MapTest();
+		MapComputeIf test = new MapComputeIf();
 		test.test01();
 		test.test02();
 		test.test03();

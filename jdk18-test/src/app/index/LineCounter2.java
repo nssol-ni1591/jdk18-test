@@ -1,4 +1,6 @@
-package util.index;
+package app.index;
+
+import util.index.KeyValue;
 
 /*
  * 汎用的なキーと値を保持するクラス：KeyValueの使用を前提に行番号を付加する
@@ -17,7 +19,7 @@ public class LineCounter2<T> {
 	}
 
 	public KeyValue<Integer, T> apply(T arg0) {
-		return new WithIndex<Integer, T>(nextIndex(), arg0);
+		return new WithIndex<>(nextIndex(), arg0);
 	}
 
 	private synchronized int nextIndex() {
@@ -28,7 +30,7 @@ public class LineCounter2<T> {
 
 		private final U key;
 		private final V value;
-		//private String format = "%s: %s";
+		//private String format = "%s: %s"-
 
 		public WithIndex(U key, V value) {
 			this.key = key;

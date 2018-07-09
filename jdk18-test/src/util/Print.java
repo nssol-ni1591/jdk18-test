@@ -1,14 +1,22 @@
 package util;
 
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
 public class Print {
+	
+	private static final PrintStream out = System.out;
+	private static final PrintStream err = System.err;
+
+	private Print() {
+		// Do nothing
+	}
 
 	@SuppressWarnings("unchecked")
-	static private <T> T cast(final Object o) {
+	private static <T> T cast(final Object o) {
 		return (T) o;
 	}
 
@@ -19,9 +27,10 @@ public class Print {
 	 * @param f リフレクションするメソッド名
 	 * @param arg メソッドを呼び出す際の引数
 	 */
-	static private <T> T wrapper(final Object o, final String f, final T arg) {
-		System.out.println();
-		System.out.println(">>>> Print#wrapper リフレクション: \"" + f + "\"");
+	private static <T> T wrapper(final Object o, final String f, final T arg) {
+		out.println();
+		out.println(">>>> Print#wrapper リフレクション: \"" + f + "\"");
+
 		try {
 			Method m;
 			if (arg == null) {
@@ -36,60 +45,69 @@ public class Print {
 				m = o.getClass().getMethod(f, arg.getClass());
 			}
 			return cast(m.invoke(o, arg));
-
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}
+		catch (NoSuchMethodException
+				| SecurityException
+				| IllegalAccessException
+				| IllegalArgumentException
+				| InvocationTargetException e) {
+			stackTrace(e);
 		}
 		return null;
 	}
 
+	// PrintStreamのprintメソッド
+	public static void println() {
+		out.println();
+	}
+	public static void println(Object o) {
+		out.println(o.toString());
+	}
+	public static void print(Object o) {
+		out.print(o.toString());
+	}
+	public static void stackTrace(Exception e) {
+		e.printStackTrace(err);
+	}
+
+
 	/*
 	 * 以下の2つのメソッドがコンパイルエラーにならないのは少々不思議？
+	 * => 返却値が異なる同一名のメソッド。staticならばOKなのか？
 	 * 多重定義において、1つ目と2つ目のメソッドの返却値がことなる
 	 */
-	static public void print(final Object o, final String f) {
+	public static void print(final Object o, final String f) {
 		wrapper(o, f, null);
-		System.out.println();
+		out.println();
 	}
-	static public <T> T print(final Object o, final String f, final T arg) {
+	public static <T> T print(final Object o, final String f, final T arg) {
 		T rc = wrapper(o, f, arg);
+		out.println();
 		return rc;
 	}
+
+	/*
+	 * argsにintが含まれる場合に変換ができない。呼出側でString.fomrat()を使用することで回避すること
+	public static void prinf(String format, Object...args) {-
+		out.printf(format, args);							-
+	}														-
+	*/
 
 	/*
 	 * 配列をprintする
 	 */
-	static public void array(final Object o, final String f, final Object[] array) {
-		//Object ret = print(o, f, array);
-		//String[] array2 = (String[])ret;
-
+	public static void array(final Object o, final String f, final Object[] array) {
 		Object[] b = Arrays.copyOf(array, array.length);
 		Object[] ret = wrapper(o, f, b);
-		for (Object s : ret) {
-			System.out.println(s.toString());
-		}
-		System.out.println("<<<< Print#array end");
+		out.println(Arrays.asList(ret));
 	}
-	//static public <T extends List<?>> T list(final Object o, final String f, final T array) {
-	static public <T extends List<? extends String>> T list(final Object o, final String f, final T array) {
+	public static <T extends List<? extends String>> T list(final Object o, final String f, final T array) {
 		T rc = wrapper(o, f, array);
 		if (rc != null) {
-			rc.forEach(System.out::println);
+			rc.forEach(out::println);
 		}
-		System.out.println("<<<< Print#list end");
+		out.println("<<<< Print#list end");
 		return rc;
 	}
+
 }

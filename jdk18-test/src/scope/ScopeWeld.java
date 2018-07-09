@@ -1,5 +1,6 @@
 package scope;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -13,15 +14,15 @@ public class ScopeWeld {
 	
 	@PostConstruct
 	public void init() {
-		log.info("init this=" + this);
-		log.info("\tsub1=" + sub1);
-		log.info("\tsub2=" + sub2);
+		log.log(Level.INFO, "init this={0}", this);
+		log.log(Level.INFO, "\tsub1={0}", sub1);
+		log.log(Level.INFO, "\tsub2={0}", sub2);
 	}
 
 	public void start() {
-		log.info("start this=" + this);
-		log.info("\tsub1=" + sub1);
-		log.info("\tsub2=" + sub2);
+		log.log(Level.INFO, "start this={0}", this);
+		log.log(Level.INFO, "\tsub1={0}", sub1);
+		log.log(Level.INFO, "\tsub2={0}", sub2);
 	}
 
 }
