@@ -33,7 +33,7 @@ public class Calendar {
 		 */
 		// 日付を１日ずつ進めた Stream<LocalDate> を生成する
 		Stream.iterate(start, d -> d.plusDays(1L))
-				.limit(7 * 6) // 6週間分の要素で打ち切る
+				.limit(7 * 6L) // 6週間分の要素で打ち切る
 				.map(d -> {
 					// 日(day)の文字列にする
 					String day;
@@ -59,7 +59,6 @@ public class Calendar {
 }
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		new Calendar().print();
 	}
 

@@ -58,7 +58,6 @@ public class FileWhois {
 
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -82,7 +81,6 @@ public class FileWhois {
 		try {
 			f.print(path);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

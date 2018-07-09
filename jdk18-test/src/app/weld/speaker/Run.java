@@ -1,4 +1,4 @@
-package weld.speaker;
+package app.weld.speaker;
 
 import javax.inject.Inject;
 

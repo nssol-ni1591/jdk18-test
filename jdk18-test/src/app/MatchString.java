@@ -13,9 +13,9 @@ import java.util.stream.Stream;
  * @author NI1591
  *
  */
-public class TestExists {
+public class MatchString {
 
-//	private static final String COND = "153.156.73.80";
+//	private static final String COND = "153.156.73.80"
 	private static final String COND = "08:32:52";
 
 	public static void main(String[] argv) {
@@ -28,7 +28,6 @@ public class TestExists {
 				Optional<String> rc = stream.sequential().filter(s -> s.contains(COND)).findFirst();
 				result = rc.isPresent();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -41,7 +40,6 @@ public class TestExists {
 				Optional<String> rc = stream.sequential().filter(s -> s.contains(COND)).findFirst();
 				result = rc.isPresent();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -54,7 +52,6 @@ public class TestExists {
 				Optional<String> rc = stream.parallel().filter(s -> s.contains(COND)).findFirst();
 				result = rc.isPresent();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -67,7 +64,6 @@ public class TestExists {
 				Optional<String> rc = stream.parallel().filter(s -> s.contains(COND)).findAny();
 				result = rc.isPresent();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -80,7 +76,6 @@ public class TestExists {
 				boolean rc = stream.sequential().anyMatch(s -> s.contains(COND));
 				result = rc;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -93,7 +88,6 @@ public class TestExists {
 				boolean rc = stream.parallel().anyMatch(s -> s.contains(COND));
 				result = rc;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

@@ -42,7 +42,6 @@ public class Interceptor implements InvocationHandler {
 		Arrays.stream(method.getAnnotations()).forEach(x -> System.out.println(x));
 		// 実装クラス側ではなく、interface側のメソッドにAnnotationを付加する
 		if (!Arrays.stream(method.getAnnotations()).anyMatch(p -> p instanceof MethodAnnotation)) {
-			//method.invoke(target, args);
 			return;
 		}
 
@@ -56,13 +55,10 @@ public class Interceptor implements InvocationHandler {
 		// 実際に実施し、結果を保存する
     }
     
-	//	Object result = method.invoke(target, args);
-
     private void leave(Method method, Object result) {
 
 		// AOPの処理が完了したことを出力。空行も出力。
 		System.out.println("AOP処理完了:");
-		//System.out.println();
 
 		// 結果がnullでなければ、結果を出力する
 		if (result != null) {

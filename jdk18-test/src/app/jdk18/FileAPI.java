@@ -1,4 +1,4 @@
-package app;
+package app.jdk18;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,6 +9,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+/*
+ * 新しい java.nio パッケージの確認
+ */
 public class FileAPI {
 
 	/*
@@ -16,10 +19,8 @@ public class FileAPI {
 	 * メソッド内で発生する例外をExceptionでcatchして再throwしているが、throws句はIOExceptionのままでよい
 	 */
 	private void print(Path path) throws IOException {
-		try {
-			Files.list(path).forEach(System.out::println);
-		} catch (Exception ex) {
-			throw ex;
+		try (Stream<Path> stream = Files.list(path)) {
+			stream.forEach(System.out::println);
 		}
 	}
 
@@ -35,31 +36,22 @@ public class FileAPI {
 		FileAPI f = new FileAPI();
 		try {
 			f.print(path);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		Path readme = path.resolve("README.md");
 		{
 			System.out.println("---- dump (jdk1.6以前) ----");
-			BufferedReader br = null;
-			try {
-				br = new BufferedReader(new FileReader(readme.toFile()));
+			try (BufferedReader br = new BufferedReader(new FileReader(readme.toFile()))) {
 				String s;
 				while ((s = br.readLine()) != null) {
 					System.out.println(s);
 				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (IOException e) {
 				e.printStackTrace();
-			} finally {
-				try {
-					br.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 		}
 		{
@@ -69,8 +61,8 @@ public class FileAPI {
 				while ((s = br.readLine()) != null) {
 					System.out.println(s);
 				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -80,7 +72,6 @@ public class FileAPI {
 			try {
 				Files.readAllLines(readme, StandardCharsets.UTF_8).forEach(System.out::println);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -89,8 +80,8 @@ public class FileAPI {
 			System.out.println("---- dump (jdk1.8 その2) ----");
 			try (Stream<String> stream = Files.lines(readme, StandardCharsets.UTF_8)) {
 				stream.forEach(System.out::println);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (IOException e) {
 				e.printStackTrace();
 			}
 		}

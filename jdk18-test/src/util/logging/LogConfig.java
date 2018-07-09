@@ -1,4 +1,4 @@
-package util.log;
+package util.logging;
 
 import java.io.IOException;
 import java.util.logging.LogManager;
@@ -6,12 +6,20 @@ import java.util.logging.LogManager;
 public class LogConfig {
 
 	public LogConfig() {
+		init();
+	}
+
+	public void setup() {
+		// Do nothing
+	}
+
+	public static void init() {
 		try {
-			LogManager.getLogManager().readConfiguration(getClass().getResourceAsStream("/logging.properties"));
+			LogManager.getLogManager().readConfiguration(LogConfig.class.getResourceAsStream("/logging.properties"));
 			// このクラスと同じパッケージでは無い場合は /myapp/logging.properties など絶対パス指定
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
 }
