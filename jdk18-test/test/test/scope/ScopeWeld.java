@@ -7,8 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 /*
- * (1) @PostConstructの動作確認
- * (2) Weldで複数回呼び出しても、異なるインスタンスが引き渡されることの確認
+ * 
  */
 public class ScopeWeld {
 

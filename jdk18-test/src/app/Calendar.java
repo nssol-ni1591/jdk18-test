@@ -56,7 +56,7 @@ public class Calendar {
 					}
 				})
 				.forEach(Print::print);
-}
+	}
 
 	public static void main(String[] args) {
 		new Calendar().print();

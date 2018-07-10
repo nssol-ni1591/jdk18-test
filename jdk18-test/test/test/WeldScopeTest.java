@@ -31,7 +31,6 @@ public class WeldScopeTest {
 			Print.stackTrace(ex);
 			rc = 1;
 		}
-		System.exit(rc);
 	}
 /*
 	public class ScopeWeld {

@@ -83,8 +83,7 @@ public class MapComputeIfTest {
         map.computeIfPresent("fizz", (key, old) -> "FIZZ" /*ここは実行されない*/);
         Print.println(AFTER + map);
 	}
-	
-	@Test
+
 	public void test04a(Map<String, Map<String, Map<String, Map<String, String>>>> map1, String m) {
 		Map<String, Map<String, Map<String, String>>> map2 = map1.computeIfAbsent(m, key -> new TreeMap<>());
 		Map<String, Map<String, String>> map3 = map2.computeIfAbsent(m, key -> new TreeMap<>());

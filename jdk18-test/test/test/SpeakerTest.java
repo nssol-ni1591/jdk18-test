@@ -41,8 +41,7 @@ public class SpeakerTest implements WeldRunner {
 	}
 	@Test
 	public void test2() {
-		int rc = new WeldWrapper(SpeakerTest.class).weld(new String[0]);
-		System.exit(rc);
+		new WeldWrapper(SpeakerTest.class).weld(new String[0]);
 	}
 
 }
