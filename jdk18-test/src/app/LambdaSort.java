@@ -1,4 +1,4 @@
-package app.jdk18;
+package app;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,11 +1,13 @@
-package app.strategy;
+package app;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import app.validator.ValidationStrategy;
+import app.validator.Validator;
 import util.Print;
 
-public class Run {
+public class LambdaFunction {
 
 	private static final String PATTERN_LITTLE = "[a-z]+";
 	private static final String PATTERN_NUMBER = "\\d+";
@@ -55,26 +57,36 @@ public class Run {
 		Print.println(p4.test("bbbb"));
 	}
 	public void test5() {
-		Print.println("<<<< ストラテジ・パターン 2()");
+		Print.println("<<<< ストラテジ・java標準Function");
 		// jdk1.8
 		Function<String, Boolean> f3 = s -> s.matches(PATTERN_NUMBER);
 		Print.println(f3.apply("aaaa"));
 
-		Function<String, Integer> f4 = String::length;
+		Function<String, Boolean> f4 = s -> s.matches(PATTERN_LITTLE);
 		Print.println(f4.apply("aaaa"));
+	}
+	public void test6() {
+		Print.println("<<<< ストラテジ・java標準Predicate");
+		// jdk1.8
+		Predicate<String> f3 = s -> s.matches(PATTERN_NUMBER);
+		Print.println(f3.test("aaaa"));
+
+		Predicate<String> f4 = s -> s.matches(PATTERN_LITTLE);
+		Print.println(f4.test("aaaa"));
 	}
 
 	public static void main(String[] args) {
 
 		// Design pattern
 		// (1) ストラテジ・パターン
-		Run run = new Run();
+		LambdaFunction run = new LambdaFunction();
 
 		run.test1();
 		run.test2();
 		run.test3();
 		run.test4();
 		run.test5();
+		run.test6();
 	}
 
 }
