@@ -40,7 +40,7 @@ public class InterceptorTest {
 		RunIF1<List<String>> targetClass;
 
 		Print.println();
-		Print.println(">>>> test1:　@AnnotationTest あり => メソッド名と引数を出力");
+		Print.println(">>>> test1:　@AnnotationTest あり => メソッド名と引数が出力されているはず");
 		targetClass = Interceptor.getProxyInstance(new Test1<List<String>>()); // この記述をなくしたい
 		targetClass.p4Jdk18(list);
 		Print.println("<<<< test1 (Interceptor) end");
@@ -64,7 +64,7 @@ public class InterceptorTest {
 		RunIF2<List<String>> targetClass;
 
 		Print.println();
-		Print.println(">>>> test3:　@AnnotationTest あり => class側にAnnotationを定義: 無意味");
+		Print.println(">>>> test3:　@AnnotationTest class側にあり => 無意味");
 		targetClass = Interceptor.getProxyInstance(new Test3<List<String>>()); // この記述をなくしたい
 		targetClass.p4Jdk18(list);
 		Print.println("<<<< test3 (Interceptor) end");

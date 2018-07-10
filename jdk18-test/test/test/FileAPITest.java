@@ -1,4 +1,4 @@
-package app;
+package test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,12 +9,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+import org.junit.Test;
+
 import util.Print;
 
 /*
  * 新しい java.nio パッケージの確認
  */
-public class FileAPI {
+public class FileAPITest {
 
 	private Path path = Paths.get(".");
 	private Path readme = path.resolve("README.md");
@@ -29,6 +31,7 @@ public class FileAPI {
 		}
 	}
 
+	@Test
 	public void test1() {
 		Print.println("---- ファイルへのパス ----");
 		Print.println("path = " + path);
@@ -36,6 +39,7 @@ public class FileAPI {
 		path.iterator().forEachRemaining(Print::println);
 		path.forEach(Print::println);
 	}
+	@Test
 	public void test2() {
 		Print.println("---- dump (jdk1.6以前) ----");
 		BufferedReader br1 = null;
@@ -60,6 +64,7 @@ public class FileAPI {
 			}
 		}
 	}
+	@Test
 	public void test3() {
 		Print.println("---- dump (jdk1.7:try-with-resources) ----");
 		try (BufferedReader br = new BufferedReader(new FileReader(readme.toFile()))) {
@@ -72,6 +77,7 @@ public class FileAPI {
 			Print.stackTrace(e);
 		}
 	}
+	@Test
 	public void test4() {
 		// readAllLinesはファイルを全部読みこんでしまうので、サイズの大きなファイルには向かない
 		Print.println("---- dump (jdk1.8 その1) ----");
@@ -82,6 +88,7 @@ public class FileAPI {
 			Print.stackTrace(e);
 		}
 	}
+	@Test
 	public void test5() {
 		// ファイルサイズがわからないならば、こちら
 		Print.println("---- dump (jdk1.8 その2) ----");
@@ -92,9 +99,10 @@ public class FileAPI {
 			Print.stackTrace(e);
 		}
 	}
+	@Test
 	public void test6() {
 		Print.println("---- Files.list ----");
-		FileAPI f = new FileAPI();
+		FileAPITest f = new FileAPITest();
 		try {
 			f.print(path);
 		}
@@ -102,6 +110,7 @@ public class FileAPI {
 			Print.stackTrace(e);
 		}
 	}
+	@Test
 	public void test7() {
 		Print.println("---- path api ----");
 		Path p = Paths.get("a", "b", "cee"); // line n1
@@ -109,9 +118,9 @@ public class FileAPI {
 		Print.println(p.endsWith(Paths.get("b", "cee")));
 		Print.println(p.endsWith(Paths.get("ee")));
 	}
-
+/*
 	public static void main(String... args) {
-		FileAPI f = new FileAPI();
+		FileAPITest f = new FileAPITest();
 		f.test1();
 		f.test2();
 		f.test3();
@@ -120,5 +129,5 @@ public class FileAPI {
 		f.test6();
 		f.test7();
 	}
-
+*/
 }

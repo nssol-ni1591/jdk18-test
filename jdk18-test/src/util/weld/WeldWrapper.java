@@ -15,7 +15,6 @@ public class WeldWrapper {
 
 	private Class<? extends WeldRunner> cl;
 
-	public WeldWrapper() { }
 	public WeldWrapper(Class<? extends WeldRunner> cl) {
 		this.cl = cl;
 	}

@@ -61,6 +61,9 @@ public class Print {
 		out.println();
 	}
 	public static void println(Object o) {
+		if (o == null) {
+			out.println(o);
+		}
 		out.println(o.toString());
 	}
 	public static void print(Object o) {
