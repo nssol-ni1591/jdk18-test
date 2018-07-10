@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import util.Print;
 
-public class FileWhois {
+public class WhoisApp {
 
 	private final PatternWrapper[] patterns = {
 			new PatternWrapper("% Information related to '(.*)'"),
@@ -60,7 +60,7 @@ public class FileWhois {
 		//Path path = Paths.get(args[0])
 
 		Print.println("---- " + args[0] + " ----");
-		FileWhois f = new FileWhois();
+		WhoisApp f = new WhoisApp();
 		try {
 			f.print();
 		} catch (IOException e) {

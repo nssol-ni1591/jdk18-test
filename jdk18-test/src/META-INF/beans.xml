@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_1.xsd">
 
 	<alternatives>
-        <class>app.weld.speaker.EnglishSpeaker</class>
+        <class>app.speaker.EnglishSpeaker</class>
     </alternatives>
 
 </beans>

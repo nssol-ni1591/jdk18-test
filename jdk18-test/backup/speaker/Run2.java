@@ -2,6 +2,7 @@ package app.weld.speaker;
 
 import javax.inject.Inject;
 
+import test.speaker.Speaker;
 import util.weld.WeldRunner;
 import util.weld.WeldWrapper;
 

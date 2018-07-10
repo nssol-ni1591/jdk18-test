@@ -1,4 +1,4 @@
-package app.index;
+package test;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
@@ -10,10 +10,12 @@ import util.index.ValWithIndex;
 
 import java.util.function.Function;
 
+import org.junit.Test;
+
 /*
  * 出力にIndexを付加する実装たち
  */
-public class RunIndex {
+public class ForEachTest {
 
 	private static String msg = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFSの同期処理 を開始します。 -----";
 	private static final String FORMAT = "%4s: %s";
@@ -23,7 +25,9 @@ public class RunIndex {
 	 * 上述のラムダ式は、匿名クラスをその場で定義してインスタンスを渡しているだけでしたので、自分で匿名クラスを記述しても問題ないわけです。
 	 * したがって以下のような実装が可能です。
 	 */
+	@Test
 	public void p2Jdk18() {
+		Print.println("p2Jdk18:");
 		List<String> list = Arrays.asList(msg.split(" +"));
 		list.stream()
 				.sorted((a, b) -> a.compareTo(b))
@@ -42,18 +46,23 @@ public class RunIndex {
 	 * Indexを付加する
 	 * ValWithIndexクラスが必要
 	 */
+	@Test
 	public void p3Jdk18() {
+		Print.println("p3Jdk18:");
 		List<String> list = Arrays.asList(msg.split(" +"));
 		list.stream()
 			.sorted((a, b) -> a.compareTo(b))
 			.map(withIndex())
 			.forEach(v -> Print.println(String.format(FORMAT, v.getIndex(), v.getVal())));
 	}
+
 	/*
 	 * 一見すると、良さそうなのですが、Stream#parallelStreamを利用された場合の動作が全く保障できません。
 	 * 実行タイミングによっては、結果が異なる
 	 */
+	@Test
 	public void p3Jdk18p1() {
+		Print.println("p3Jdk18p1:");
 		List<String> list = Arrays.asList(msg.split(" +"));
 		list.stream()
 			.parallel()
@@ -72,8 +81,12 @@ public class RunIndex {
 		};
 	}
 
-
+	/*
+	 * 
+	 */
+	@Test
 	public void p4Jdk18() {
+		Print.println("p4Jdk18:");
 		List<String> list = Arrays.asList(msg.split(" +"));
 		list.stream()
 			.sorted((a, b) -> a.compareTo(b))
@@ -89,22 +102,6 @@ public class RunIndex {
 				return new  AbstractMap.SimpleImmutableEntry<>(index++, t);
 			}
 		};
-	}
-
-
-	public static void main(String... arvs) {
-		RunIndex stream = new RunIndex();
-
-		// Consumerを実装するパターン。実装側で自由な情報を付加することができる
-		Print.print(stream, "p2Jdk18");
-
-		// Indexを付加するためのクラス ValWithIndex を使用するパターン
-		Print.print(stream, "p3Jdk18");
-		// parallelを使用するとソートが正常に動作しないことの確認　⇒　当然ですね
-		Print.print(stream, "p3Jdk18p1");
-
-		// Indexを付加するためのクラスに標準の AbstractMap.SimpleImmutableEntry を使用するパターン
-		Print.print(stream, "p4Jdk18");
 	}
 
 }

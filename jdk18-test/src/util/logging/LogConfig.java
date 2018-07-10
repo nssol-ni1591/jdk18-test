@@ -17,7 +17,7 @@ public class LogConfig {
 
 	public static void init() {
 		try {
-			LogManager.getLogManager().readConfiguration(LogConfig.class.getResourceAsStream("/logging.properties"));
+			LogManager.getLogManager().readConfiguration(LogConfig.class.getResourceAsStream("/META-INF/logging.properties"));
 			// このクラスと同じパッケージでは無い場合は /myapp/logging.properties など絶対パス指定
 		}
 		catch (IOException e) {

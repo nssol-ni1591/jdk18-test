@@ -1,4 +1,4 @@
-package app;
+package test;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,17 +8,21 @@ import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.inject.Inject;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import util.Print;
+import util.logging.LogConfig;
 import util.logging.StdErr;
 import util.logging.StdOut;
 
-public class LogOutput {
+public class WeldLogTest {
 
 	@Inject private Logger log;
 	@Inject @StdOut private Logger out;
 	@Inject @StdErr private Logger err;
 
-	public LogOutput() {
+	public WeldLogTest() {
 		// Do nothing
 	}
 	
@@ -43,11 +47,18 @@ public class LogOutput {
 		log.log(Level.INFO, "StandardOutput.run: end.");
 	}
 
-	public static void main(String[] args) {
+	@Before
+	public void before( ) {
+		// Do nothing
+	}
+
+	@Test
+	public void test() {
+		LogConfig.init();
 		try(SeContainer container = SeContainerInitializer.newInstance().initialize()) {
 	        // start the container, retrieve a bean and do work with it
-			Instance<LogOutput> instance = container.select(LogOutput.class);
-			LogOutput application = instance.get();
+			Instance<WeldLogTest> instance = container.select(WeldLogTest.class);
+			WeldLogTest application = instance.get();
 			application.run();
 	    }
 		catch (Exception ex) {

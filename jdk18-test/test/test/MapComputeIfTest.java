@@ -1,12 +1,14 @@
-package compute;
+package test;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.junit.Test;
+
 import util.Print;
 
-public class MapComputeIf {
+public class MapComputeIfTest {
 	
 	private static final String BEFORE = "before: ";
 	private static final String AFTER = "after: ";
@@ -18,6 +20,7 @@ public class MapComputeIf {
 	 * remappingFunction が null 以外の値を返した場合は、マップの中身をその値で置き換える。
 	 * remappingFunction が null を返した場合、そのキーのエントリは削除される。
 	 */
+	@Test
 	public void test01() {
 		Print.println("[test01]");
 
@@ -41,6 +44,7 @@ public class MapComputeIf {
 	 * デフォルトの実装は同期されないので、マルチスレッド使うときは注意。
 	 * ConcurrentHashMap の computeIfAbsent() は同期するようにデフォルトメソッドをオーバーライドしており、そのことが API ドキュメントに明記されている。
 	 */
+	@Test
 	public void test02() {
 		Print.println("[test02]");
 
@@ -64,6 +68,7 @@ public class MapComputeIf {
 	 * remappingFunction が null 以外の値を返した場合は、マップの中身をその値で置き換える。
 	 * remappingFunction が null を返した場合、そのキーのエントリは削除される。
 	 */
+	@Test
 	public void test03() {
 		Print.println("[test03]");
 		
@@ -79,12 +84,14 @@ public class MapComputeIf {
         Print.println(AFTER + map);
 	}
 	
+	@Test
 	public void test04a(Map<String, Map<String, Map<String, Map<String, String>>>> map1, String m) {
 		Map<String, Map<String, Map<String, String>>> map2 = map1.computeIfAbsent(m, key -> new TreeMap<>());
 		Map<String, Map<String, String>> map3 = map2.computeIfAbsent(m, key -> new TreeMap<>());
 		Map<String, String> map4 = map3.computeIfAbsent(m, key -> new TreeMap<>());
 		map4.put(m, m);
 	}
+	@Test
 	public void test04() {
 		Print.println("[test04]");
 
@@ -95,14 +102,6 @@ public class MapComputeIf {
         test04a(map1, "abc2");
         test04a(map1, "abc3");
         Print.println(AFTER + map1);
-	}
-
-	public static void main(String[] args) {
-		MapComputeIf test = new MapComputeIf();
-		test.test01();
-		test.test02();
-		test.test03();
-		test.test04();
 	}
 
 }

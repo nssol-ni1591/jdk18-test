@@ -1,4 +1,4 @@
-package app.weld.speaker;
+package app.speaker;
 
 public interface Speaker {
 

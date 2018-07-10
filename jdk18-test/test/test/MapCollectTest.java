@@ -1,4 +1,4 @@
-package collect;
+package test;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -16,9 +16,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.junit.Test;
+
 import util.Print;
 
-public class MapCollect {
+public class MapCollectTest {
 
 	private static final String[] DATA1 = new String[] { "A", "B", "C", "D", "E" };
 	private static final String[] DATA2 = new String[] { "X", "Y", "Z" };
@@ -26,6 +28,7 @@ public class MapCollect {
 	// test1系:DATA1を小文字に変換して、Listクラスに集約する
 
 	// innerクラスで実装した場合
+	@Test
 	public void test1() {
 		Print.println("[MapCollect.test1]");
 
@@ -59,6 +62,7 @@ public class MapCollect {
 		// ⇒ [a, b, c, d, e]
 	}
 	// Streamを使用した場合
+	@Test
 	public void test1a() {
 		Print.println("[MapCollect.test1a]");
 
@@ -73,6 +77,7 @@ public class MapCollect {
 		// ⇒ [a, b, c, d, e]
 	}
 	// method参照を使用した場合
+	@Test
 	public void test1b() {
 		Print.println("[MapCollect.test1b]");
 
@@ -87,6 +92,7 @@ public class MapCollect {
 	}
 
 	// ストリームを結合する
+	@Test
 	public void test3() {
 		Print.println("[MapCollect.test3]");
 		Stream<String> s1 = Arrays.stream(DATA1);
@@ -95,6 +101,7 @@ public class MapCollect {
 		Stream.concat(s1, s2).forEach(Print::println);
 	}
 	// ファイルのデータを結合する
+	@Test
 	public void test4() {
 		Print.println("[MapCollect.test4]");
 		String f1 = "./s1.txt";
@@ -111,6 +118,7 @@ public class MapCollect {
 			Print.stackTrace(e);
 		}
 	}
+	@Test
 	public void test4a() {
 		Print.println("[MapCollect.test4a]");
 		String f1 = "./s1.txt";
@@ -130,14 +138,4 @@ public class MapCollect {
 		
 	}
 
-	public static void main(String[] argv) {
-		MapCollect t = new MapCollect();
-		t.test1();
-		t.test1a();
-		t.test1b();
-
-		t.test3();
-		t.test4();
-		t.test4a();
-	}
 }
