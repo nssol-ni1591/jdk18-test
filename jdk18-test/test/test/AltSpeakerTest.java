@@ -6,8 +6,7 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 
-import app.speaker.Speaker;
-import app.speaker.annotation.Chainese;
+import app.speaker.alt.Speaker;
 import app.speaker.annotation.English;
 import app.speaker.annotation.Japanese;
 import util.weld.WeldRunner;
@@ -15,15 +14,19 @@ import util.weld.WeldWrapper;
 
 /*
  * WeldのAlternativesをテストするためのモジュール
+ * Alternativeは同じinterfaceを実装した複数のクラスから特定のクラスに絞り込む場合に使用する.
+ * 絞り込みの結果は複数のクラスでも問題ないが、Inject側では1クラスになるようにQualitierもしくはDefaultが必要になる.
+ * 以下のクラスでは、Alternativesタグに、EnglishとJapaneseを指定あり、その中からAnnotationでクラスを特定する.
+ * なお、Englishには@Defaultが指定してあるので、@Inject側にQualitierがない場合はEnglishが選択される.
  */
-public class SpeakerTest implements WeldRunner {
+public class AltSpeakerTest implements WeldRunner {
 
 	@Inject private Speaker speaker;
 	@Inject @English  private Speaker english;
-	@Inject @Chainese private Speaker chainese;
+	@Inject private Speaker chainese;	// @Chaineseを指定するとWeldの初期化中にエラーになる
 	@Inject @Japanese private Speaker japanese;
 
-	//private SpeakerTest application;
+	//private AltSpeakerTest application;
 
 	@Override
 	public int start(String...args) {
@@ -35,7 +38,7 @@ public class SpeakerTest implements WeldRunner {
 		this.speaker.speak();
 	}
 	public void english() {
-		this.speaker.speak();
+		this.chainese.speak();
 	}
 	public void chainese() {
 		this.chainese.speak();
@@ -43,7 +46,9 @@ public class SpeakerTest implements WeldRunner {
 	public void japanese() {
 		this.japanese.speak();
 	}
-/*
+
+	/*
+	@Before
 	public void before() {
 		// for weld-se 2.2.x
 		//Weld weld = new Weld()
@@ -51,46 +56,47 @@ public class SpeakerTest implements WeldRunner {
 		
 		// for weld-se 3.0.x
 		try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
-			application = container.select(SpeakerTest.class).get();
+			application = container.select(AltSpeakerTest.class).get();
 		}
 	}
-*/
+	*/
+
 	@Test
 	public void test1() {
-		new WeldWrapper(SpeakerTest.class).weld(new String[0]);
-		// @Default により英語が出力されればOK
+		new WeldWrapper(AltSpeakerTest.class).weld(new String[0]);
+		// Alternative + @Default により、英語が出力されればOK
 	}
 	@Test
 	public void test2() {
 		try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
-			SpeakerTest application = container.select(SpeakerTest.class).get();
+			AltSpeakerTest application = container.select(AltSpeakerTest.class).get();
 			application.speak();
 		}
-		// @Default により英語が出力されればOK
+		// Alternative + @Default により英語が出力されればOK
 	}
 	@Test
 	public void test3() {
 		try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
-			SpeakerTest application = container.select(SpeakerTest.class).get();
+			AltSpeakerTest application = container.select(AltSpeakerTest.class).get();
 			application.english();
 		}
-		// @English により英語が出力されればOK
+		// Alternative + @English により英語が出力されればOK
 	}
 	@Test
 	public void test4() {
 		try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
-			SpeakerTest application = container.select(SpeakerTest.class).get();
+			AltSpeakerTest application = container.select(AltSpeakerTest.class).get();
 			application.japanese();
 		}
-		// @Japanese により日本語で出力されればOK
+		// Alternative + @Japanese により日本語が出力されればOK
 	}
 	@Test
 	public void test5() {
 		try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
-			SpeakerTest application = container.select(SpeakerTest.class).get();
+			AltSpeakerTest application = container.select(AltSpeakerTest.class).get();
 			application.chainese();
 		}
-		// @Chainese により中国で出力されればOK
+		// Alternative + @Default により英語が出力されればOK
 	}
 
 }

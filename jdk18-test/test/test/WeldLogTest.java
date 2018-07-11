@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import util.Print;
+import util.elaps.WithElaps;
 import util.logging.LogConfig;
 import util.logging.StdErr;
 import util.logging.StdOut;
@@ -25,7 +26,8 @@ public class WeldLogTest {
 	public WeldLogTest() {
 		// Do nothing
 	}
-	
+
+	@WithElaps
 	public void run() {
 
 		log.log(Level.INFO, "StandardOutput.run: start ...");

@@ -1,17 +1,20 @@
-package app;
+package test;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import org.junit.Test;
 
 import app.validator.ValidationStrategy;
 import app.validator.Validator;
 import util.Print;
 
-public class LambdaFunction {
+public class LambdaFunctionTest {
 
 	private static final String PATTERN_LITTLE = "[a-z]+";
 	private static final String PATTERN_NUMBER = "\\d+";
 
+	@Test
 	public void test1() {
 		Print.println("<<<< ストラテジ・パターン (jdk17)");
 		// jdk1.7
@@ -29,6 +32,7 @@ public class LambdaFunction {
 		};
 		Print.println(v4.execute("bbbb"));
 	}
+	@Test
 	public void test2() {
 		Print.println("<<<< ストラテジ・パターン (jdk18)");
 		// jdk1.8
@@ -38,6 +42,7 @@ public class LambdaFunction {
 		Validator v4 = new Validator((String s) -> s.matches(PATTERN_LITTLE));
 		Print.println(v4.validate("bbbb"));
 	}
+	@Test
 	public void test3() {
 		Print.println("<<<< ストラテジ・パターン (直接ストラテジのインターフェースを使用することもできるはず)");
 		// jdk1.8
@@ -47,6 +52,7 @@ public class LambdaFunction {
 		ValidationStrategy v4 = (String s) -> s.matches(PATTERN_LITTLE);
 		Print.println(v4.execute("bbbb"));
 	}
+	@Test
 	public void test4() {
 		Print.println("<<<< ストラテジ・パターン (java.util.functionを使う)");
 		// jdk1.8
@@ -56,6 +62,7 @@ public class LambdaFunction {
 		Predicate<String> p4 = s -> s.matches(PATTERN_LITTLE);
 		Print.println(p4.test("bbbb"));
 	}
+	@Test
 	public void test5() {
 		Print.println("<<<< ストラテジ・java標準Function");
 		// jdk1.8
@@ -65,6 +72,7 @@ public class LambdaFunction {
 		Function<String, Boolean> f4 = s -> s.matches(PATTERN_LITTLE);
 		Print.println(f4.apply("aaaa"));
 	}
+	@Test
 	public void test6() {
 		Print.println("<<<< ストラテジ・java標準Predicate");
 		// jdk1.8
@@ -79,7 +87,7 @@ public class LambdaFunction {
 
 		// Design pattern
 		// (1) ストラテジ・パターン
-		LambdaFunction run = new LambdaFunction();
+		LambdaFunctionTest run = new LambdaFunctionTest();
 
 		run.test1();
 		run.test2();

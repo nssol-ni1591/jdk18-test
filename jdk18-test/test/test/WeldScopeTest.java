@@ -6,7 +6,6 @@ import javax.enterprise.inject.se.SeContainerInitializer;
 import org.junit.Test;
 
 import test.scope.ScopeWeld;
-import util.Print;
 
 /*
  * (1) @PostConstructの動作確認
@@ -15,21 +14,16 @@ import util.Print;
 public class WeldScopeTest {
 
 	@Test
-	public void test1() {
+	public void test1() throws Exception {
 		System.setProperty("java.util.logging.config.class", "util.logging.LogConfig");
 		System.setProperty("file.encoding", "UTF-8");
 
-		int rc = 0;
 		try (SeContainer container = SeContainerInitializer.newInstance().initialize()) {
 			ScopeWeld app1 = container.select(ScopeWeld.class).get();
 			app1.start();
 
 			ScopeWeld app2 = container.select(ScopeWeld.class).get();
 			app2.start();
-		}
-		catch (Exception ex) {
-			Print.stackTrace(ex);
-			rc = 1;
 		}
 	}
 /*

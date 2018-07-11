@@ -1,4 +1,4 @@
-package app;
+package test;
 
 
 import java.io.BufferedReader;
@@ -10,20 +10,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.junit.Test;
+
 import util.Print;
 
 /*
  * Streamを何から作り出す
  */
-public class StreamSupplier {
+public class LambdaSupplierTest {
 
 	private static final String MSG = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ----- DR_NFSの同期処理 を開始します。 -----";
 	private static final String FORMAT = "\"%s\"";
 
-	public StreamSupplier() {
+	public LambdaSupplierTest() {
 		// Do nothing
 	}
 
+	@Test
 	public void p1Jdk18() {
 		// 基本系
 		Stream.of(MSG.split(" +"))
@@ -31,6 +34,7 @@ public class StreamSupplier {
 				.map(s -> String.format(FORMAT, s))
 				.forEach(Print::println);
 	}
+	@Test
 	public void p1Jdk18p2() {
 		// 配列から
 		Arrays.stream(MSG.split(" +"))
@@ -38,6 +42,7 @@ public class StreamSupplier {
 				.map(s -> String.format(FORMAT, s))
 				.forEach(Print::println);
 	}
+	@Test
 	public void p1Jdk18p3() {
 		// コレクションから
 		List<String> list = Arrays.asList(MSG.split(" +"));
@@ -46,6 +51,7 @@ public class StreamSupplier {
 				.map(s -> String.format(FORMAT, s))
 				.forEach(Print::println);
 	}
+
 	public void p1Jdk18p4() {
 		// Readerから
 		try (
@@ -55,6 +61,8 @@ public class StreamSupplier {
 				BufferedReader br = new BufferedReader(ppr);
 				)
 		{
+			//Pipeを使っていない => 当然、処理途中でストールする
+			//データ量が小さすぎる
 			Arrays.stream(MSG.split(" +")).forEach(pw::println);
 			pw.flush();
 
@@ -67,15 +75,14 @@ public class StreamSupplier {
 			Print.stackTrace(e);
 		}
 	}
-
-
+/*
 	public static void main(String... arvs) {
-		StreamSupplier stream = new StreamSupplier();
+		LambdaSupplierTest stream = new LambdaSupplierTest();
 
 		Print.print(stream, "p1Jdk18");
 		Print.print(stream, "p1Jdk18p2");
 		Print.print(stream, "p1Jdk18p3");
 		Print.print(stream, "p1Jdk18p4");
 	}
-
+*/
 }

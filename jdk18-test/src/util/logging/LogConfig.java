@@ -21,7 +21,7 @@ public class LogConfig {
 			// このクラスと同じパッケージでは無い場合は /myapp/logging.properties など絶対パス指定
 		}
 		catch (IOException e) {
-			Print.stackTrace(e);
+			Print.message(e);
 		}
 	}
 }
