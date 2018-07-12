@@ -33,11 +33,11 @@ public class WeldLogTest {
 		log.log(Level.INFO, "StandardOutput.run: start ...");
 
 		// ログ出力
-		out.finest("ログ出力テスト： finest");
-		out.fine("ログ出力テスト： fine");
-		out.info("ログ出力テスト： info");
-		out.warning("ログ出力テスト： warning");
-		out.severe("ログ出力テスト： severe");
+		out.finest("標準出力テスト： finest");
+		out.fine("標準出力テスト： fine");
+		out.info("標準出力テスト： info");
+		out.warning("標準出力テスト： warning");
+		out.severe("標準出力テスト： severe");
 		
 		// ログ出力
 		err.finest("エラー出力テスト： finest");

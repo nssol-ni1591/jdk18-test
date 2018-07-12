@@ -9,12 +9,9 @@ import util.index.KeyValue;
 public class LineCounter2<T> {
 
 	private int max = 0;
-	private String format = "%s: %s";
+	private final String format;
 
-	public LineCounter2() {
-	}
 	public LineCounter2(String format) {
-		this();
 		this.format = format;
 	}
 

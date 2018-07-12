@@ -88,13 +88,6 @@ public class Print {
 		out.println();
 	}
 	/*
-	public static <T> T print(final Object o, final String f, final T arg) {
-		T rc = wrapper(o, f, arg);
-		out.println();
-		return rc;
-	}
-	*/
-	/*
 	 * argsにintが含まれる場合に変換ができない。呼出側でString.fomrat()を使用することで回避すること
 	public static void prinf(String format, Object...args) {-
 		out.printf(format, args);							-

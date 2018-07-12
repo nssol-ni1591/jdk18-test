@@ -60,7 +60,7 @@ public class LineNumberTest {
 	@Test
 	public void passgenTop22() {
 		Print.println("[LineCounter2]");
-		LineCounter2<String> w = new LineCounter2<>();
+		LineCounter2<String> w = new LineCounter2<>("%s: %s");
 		Random random = new Random(SEED);
 		Stream.generate(() -> new String(random.ints('!', '~' + 1).limit(20).toArray(), 0, 20))
 				.limit(10)

@@ -7,9 +7,6 @@ public class LineCounter4 {
 
 	private int index;
 
-	public LineCounter4() {
-		this.index = 0;
-	}
 	public LineCounter4(int index) {
 		this.index = index;
 	}

@@ -8,6 +8,10 @@ public class Passwd {
 
 	private static final long SEED = 19610802;
 
+	private Passwd() {
+		// Do nothing
+	}
+
 	/*
 	 * patterns の正規化表現はAND条件 ... 当たり前だが
 	 */
