@@ -1,4 +1,4 @@
-package test;
+package test.stream;
 
 import java.util.AbstractMap;
 import java.util.Arrays;

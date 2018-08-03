@@ -1,4 +1,4 @@
-package test;
+package test.stream;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import util.Print;
 
-public class MapCollectTest {
+public class StreamTest {
 
 	private static final String[] DATA1 = new String[] { "A", "B", "C", "D", "E" };
 	private static final String[] DATA2 = new String[] { "X", "Y", "Z" };
@@ -30,8 +30,7 @@ public class MapCollectTest {
 	// innerクラスで実装した場合
 	@Test
 	public void test1() {
-		Print.println("[MapCollect.test1]");
-
+		Print.println("[DATA1を小文字に変換して、Listクラスに集約する]");
 		final List<String> list = Arrays.stream(DATA1)
 				// わざと innerクラスを使用
 				.map(new Function<String, String>() {
@@ -64,29 +63,25 @@ public class MapCollectTest {
 	// Streamを使用した場合
 	@Test
 	public void test1a() {
-		Print.println("[MapCollect.test1a]");
-
+		Print.println("[DATA1を小文字に変換して、Listクラスに集約する]");
 		final List<String> resultl1 = Arrays.stream(DATA1)
 				// わざと SonarLintのエラーは無視すること
 				.map(s -> s.toLowerCase())
 				.collect(() -> new ArrayList<>(),
 						(t, s) -> t.add(s),
 						(t, u) -> t.addAll(u));
-
 		Print.println(resultl1);
 		// ⇒ [a, b, c, d, e]
 	}
 	// method参照を使用した場合
 	@Test
 	public void test1b() {
-		Print.println("[MapCollect.test1b]");
-
+		Print.println("[DATA1を小文字に変換して、Listクラスに集約する]");
 		final List<String> resultl1 = Arrays.stream(DATA1)
 				.map(String::toLowerCase)
 				.collect(ArrayList::new,
 						(t, s) -> t.add(s),
 						(t, u) -> t.addAll(u));
-
 		Print.println(resultl1);
 		// ⇒ [a, b, c, d, e]
 	}
@@ -94,19 +89,18 @@ public class MapCollectTest {
 	// ストリームを結合する
 	@Test
 	public void test3() {
-		Print.println("[MapCollect.test3]");
+		Print.println("[ストリームを結合する： concat]");
 		Stream<String> s1 = Arrays.stream(DATA1);
 		Stream<String> s2 = Arrays.stream(DATA2);
-
 		Stream.concat(s1, s2).forEach(Print::println);
 	}
+
 	// ファイルのデータを結合する
 	@Test
 	public void test4() {
-		Print.println("[MapCollect.test4]");
+		Print.println("[ファイルを結合する： concat]");
 		String f1 = "./s1.txt";
 		String f2 = "./s2.txt";
-
 		Print.println("path=" + Paths.get(f1).toAbsolutePath().toString());
 
 		try (Stream<String> s1 = Files.lines(Paths.get(f1));
@@ -120,7 +114,7 @@ public class MapCollectTest {
 	}
 	@Test
 	public void test4a() {
-		Print.println("[MapCollect.test4a]");
+		Print.println("[ファイルを結合する： SequenceInputStream]");
 		String f1 = "./s1.txt";
 		String f2 = "./s2.txt";
 
@@ -135,7 +129,34 @@ public class MapCollectTest {
 		catch (IOException e) {
 			Print.stackTrace(e);
 		}
-		
+	}
+	@Test
+	public void test4b() throws IOException {
+		Print.println("[ファイルを結合する： toList]");
+		String f1 = "./s1.txt";
+		String f2 = "./s2.txt";
+		Print.println("path=" + Paths.get(f1).toAbsolutePath().toString());
+
+		//List<String> list = 
+		Stream.of(f1, f2)
+			.flatMap(f -> {
+				/* この実装ではInputStreamが先に閉じてしまう
+				try (Stream<String> s = Files.lines(Paths.get(f))) {
+					return s;
+				}
+				catch (IOException e) {
+					Print.stackTrace(e);
+				}
+				return null;
+				*/
+				try {
+					return Files.lines(Paths.get(f));
+				}
+				catch (IOException e) {
+					return Stream.empty();
+				}
+			})
+			.forEach(Print::println);
 	}
 
 }
