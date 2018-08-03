@@ -5,9 +5,5 @@
 <!--
         <class>app.speaker.EnglishSpeaker</class>
 -->
-	<alternatives>
-		<class>app.speaker.alt.EnglishSpeaker</class>
-		<class>app.speaker.alt.JapaneseSpeaker</class>
-	</alternatives>
 
 </beans>

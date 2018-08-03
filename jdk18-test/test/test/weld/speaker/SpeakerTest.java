@@ -1,4 +1,4 @@
-package test.speaker;
+package test.weld.speaker;
 
 import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;

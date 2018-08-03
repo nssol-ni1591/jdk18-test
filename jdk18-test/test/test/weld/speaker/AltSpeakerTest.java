@@ -1,4 +1,4 @@
-package test.speaker;
+package test.weld.speaker;
 
 import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
@@ -23,10 +23,10 @@ public class AltSpeakerTest implements WeldRunner {
 
 	@Inject private Speaker speaker;
 	@Inject @English  private Speaker english;
-	@Inject private Speaker chainese;	// @Chaineseを指定するとWeldの初期化中にエラーになる
+	//@Inject @Chainese private Speaker chainese;	// @Chaineseを指定するとWeldの初期化中にエラーになる
+													// AlternativeタグにChainseseが定義されていないため@Inject先のクラスがわからない
+	@Inject private Speaker chainese;	// @修飾子を省略しているので、当然Englishで出力される
 	@Inject @Japanese private Speaker japanese;
-
-	//private AltSpeakerTest application;
 
 	@Override
 	public int start(String...args) {
