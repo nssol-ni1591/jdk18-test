@@ -1,6 +1,7 @@
-package util;
+package app.validator;
 
 public interface ValidationStrategy {
+
 	boolean execute(String s);
-//	int length(String s);
+
 }
