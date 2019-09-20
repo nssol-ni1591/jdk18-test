@@ -37,11 +37,10 @@ public class InterceptorTest {
 	public void test1() {
 		String[] array = msg.split(" +");
 		final List<String> list = Arrays.asList(array);
-		RunIF1<List<String>> targetClass;
 
 		Print.println();
-		Print.println(">>>> test1:　@AnnotationTest あり => メソッド名と引数が出力されているはず");
-		targetClass = Interceptor.getProxyInstance(new Test1<List<String>>()); // この記述をなくしたい
+		Print.println(">>>> test1:　Annotation が interface にあり => 追加処理：メソッド名と引数が出力されているはず");
+		RunIF1<List<String>> targetClass = Interceptor.getProxyInstance(new Test1<List<String>>()); // この記述をなくしたい
 		targetClass.p4Jdk18(list);
 		Print.println("<<<< test1 (Interceptor) end");
 	}
@@ -49,11 +48,10 @@ public class InterceptorTest {
 	public void test2() {
 		String[] array = msg.split(" +");
 		final List<String> list = Arrays.asList(array);
-		RunIF2<List<String>> targetClass;
 
 		Print.println();
-		Print.println(">>>> test2:　@AnnotationTest なし");
-		targetClass = Interceptor.getProxyInstance(new Test2<List<String>>()); // この記述をなくしたい
+		Print.println(">>>> test2:　Annotation が interfaceにも実装クラスにもない => 追加処理が出力されない");
+		RunIF2<List<String>> targetClass = Interceptor.getProxyInstance(new Test2<List<String>>()); // この記述をなくしたい
 		targetClass.p4Jdk18(list);
 		Print.println("<<<< test2 (Interceptor) end");
 	}
@@ -61,25 +59,35 @@ public class InterceptorTest {
 	public void test3() {
 		String[] array = msg.split(" +");
 		final List<String> list = Arrays.asList(array);
-		RunIF2<List<String>> targetClass;
 
 		Print.println();
-		Print.println(">>>> test3:　@AnnotationTest class側にあり => 無意味");
-		targetClass = Interceptor.getProxyInstance(new Test3<List<String>>()); // この記述をなくしたい
+		Print.println(">>>> test3:　Annotation が 実装クラスにあり => 追加処理が出力されない （InterceptorクラスはInterfaceを取得しているので当然）");
+		RunIF2<List<String>> targetClass = Interceptor.getProxyInstance(new Test3<List<String>>()); // この記述をなくしたい
+		targetClass.p4Jdk18(list);
+		Print.println("<<<< test3 (Interceptor) end");
+	}
+	@Test
+	public void test4() {
+		String[] array = msg.split(" +");
+		final List<String> list = Arrays.asList(array);
+
+		Print.println();
+		Print.println(">>>> test4:　Annotation が 実装クラスにあり => AOP処理自体が行われない （Interfaceを使用していないので当然）");
+		Test3<List<String>> targetClass = Interceptor.getProxyInstance(new Test3<List<String>>()); // この記述をなくしたい
 		targetClass.p4Jdk18(list);
 		Print.println("<<<< test3 (Interceptor) end");
 	}
 	@Test(expected = ClassCastException.class)
-	public void test4() {
+	public void test9() {
 		String[] array = msg.split(" +");
 		final List<String> list = Arrays.asList(array);
 		Test2<List<String>> targetClass;
 
 		Print.println();
-		Print.println(">>>> test4: InterceptorのproxyクラスはInterfaceで受けないと例外が発生する");
+		Print.println(">>>> test9: InterceptorのproxyクラスはInterfaceで受けないと例外が発生する");
 		targetClass = Interceptor.getProxyInstance(new Test2<List<String>>()); // この記述をなくしたい
 		targetClass.p4Jdk18(list);
-		Print.println("<<<< test4 (Interceptor) end");
+		Print.println("<<<< test9 (Interceptor) end");
 	}
 
 	public interface RunIF1<T extends List<? extends String>> {
@@ -94,7 +102,7 @@ public class InterceptorTest {
 
 		@Override
 		public List<? extends String> p4Jdk18(List<? extends String> list) {
-			Print.println("call \"p4Jdk18(List<? extends String> list)\"");
+//			Print.println("Test1: call \"p4Jdk18(List<? extends String> list)\"");
 			list.sort((a, b) -> a.length() - b.length());
 			return list;
 		}
@@ -103,7 +111,7 @@ public class InterceptorTest {
 
 		@Override
 		public List<? extends String> p4Jdk18(List<? extends String> list) {
-			Print.println("call \"p4Jdk18(List<? extends String> list)\"");
+//			Print.println("Test2: call \"p4Jdk18(List<? extends String> list)\"");
 			list.sort((a, b) -> a.length() - b.length());
 			return list;
 		}
@@ -113,7 +121,7 @@ public class InterceptorTest {
 		@Override
 		@PrintCall.MethodAnnotation
 		public List<? extends String> p4Jdk18(List<? extends String> list) {
-			Print.println("call \"p4Jdk18(List<? extends String> list)\"");
+//			Print.println("TEST3: call \"p4Jdk18(List<? extends String> list)\"");
 			list.sort((a, b) -> a.length() - b.length());
 			return list;
 		}
