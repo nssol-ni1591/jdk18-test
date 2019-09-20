@@ -15,15 +15,15 @@ public class PrintTest {
 	private static final String MSG = "2016/12/19 07:08:18  SOPE_DR_01-no_db.sh INFORMATION: ** ----- DR_NFSの同期処理 を開始します 。 +++++";
 
 	public String[] array(String[] array) {
-		Print.println("(1) 配列データの単純出力");
+		Print.println("(1)  配列データの単純出力");
 		return array;
 	}
 	public List<String> list(List<String> list) {
-		Print.println("(2) リストデータの単純出力");
+		Print.println("(2)  リストデータの単純出力");
 		return list;
 	}
 	public String print() {
-		Print.println("(3) 文字列出力");
+		Print.println("(3)  文字列出力");
 		return MSG;
 	}
 
@@ -34,8 +34,14 @@ public class PrintTest {
 		final List<String> list = Arrays.asList(array);
 
 		Print.print(m, "print");
+
+		// 配列の出力イメージはオブジェクトのアドレスになる
 		Print.array(m, "array", array);
+		System.out.println(array);
+
+		// listの出力イメージは同じ
 		Print.list(m, "list", list);
+		System.out.println(list);
 	}
 	@Test
 	public void test2() {
@@ -44,7 +50,10 @@ public class PrintTest {
 		Print.println("abc");
 		Print.println(MSG.split(" +"));
 		Print.print("xyz");
+	}
 
+	@Test
+	public void test9() {
 		Exception ex = new Exception("Exception massage");
 		Print.stackTrace(ex);
 		Print.message(ex);
