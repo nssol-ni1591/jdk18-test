@@ -178,6 +178,7 @@ public class CollectToMap {
 						));
 		map.entrySet().forEach(System.out::println);
 	}
+	/*
 	@Test
 	public void test6() {
 		System.out.println("----文字列の1文字目をキー、2つ目のキーとして文字数、3つめのキーとして要素数を設定したMapを生成するにはどうする？----");
@@ -186,12 +187,12 @@ public class CollectToMap {
 				.collect(Collectors.toMap(
 						t -> t.substring(0, 1)
 						, t -> {
-							return new HashMap<>(
+							return new HashMap<String, Map<Integer, Map<Integer, List<String>>>> (
 									Collections.singletonMap(
 											Integer.valueOf(t.length())
-											, new HashMap<>(Collections.singletonMap(
+											, new HashMap<Integer, List<String>>(Collections.singletonMap(
 													1 //Integer.valueOf(1)
-													, new ArrayList<>(Collections.singletonList(t))))
+													, new ArrayList<String>(Collections.singletonList(t))))
 											)
 									);
 						}
@@ -222,4 +223,5 @@ public class CollectToMap {
 						));
 		map.entrySet().forEach(System.out::println);
 	}
+	*/
 }
