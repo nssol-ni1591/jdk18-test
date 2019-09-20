@@ -71,7 +71,7 @@ public class Print {
 		out.print(o.toString());
 	}
 	public static void stackTrace(Exception e) {
-		e.printStackTrace(err);
+		e.printStackTrace();
 	}
 	public static void message(Exception e) {
 		err.println(e.getMessage());
