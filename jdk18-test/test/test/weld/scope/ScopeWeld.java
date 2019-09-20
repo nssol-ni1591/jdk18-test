@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 /*
@@ -28,5 +29,11 @@ public class ScopeWeld {
 		log.log(Level.INFO, "\tsub2={0}", sub2);
 	}
 
+	@PreDestroy
+	public void end() {
+		log.log(Level.INFO, "end this={0}", this);
+		log.log(Level.INFO, "\tsub1={0}", sub1);
+		log.log(Level.INFO, "\tsub2={0}", sub2);
+	}
 }
 
