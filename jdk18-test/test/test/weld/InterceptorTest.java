@@ -66,26 +66,14 @@ public class InterceptorTest {
 		targetClass.p4Jdk18(list);
 		Print.println("<<<< test3 (Interceptor) end");
 	}
-	@Test
-	public void test4() {
-		String[] array = msg.split(" +");
-		final List<String> list = Arrays.asList(array);
-
-		Print.println();
-		Print.println(">>>> test4:　Annotation が 実装クラスにあり => AOP処理自体が行われない （Interfaceを使用していないので当然）");
-		Test3<List<String>> targetClass = Interceptor.getProxyInstance(new Test3<List<String>>()); // この記述をなくしたい
-		targetClass.p4Jdk18(list);
-		Print.println("<<<< test3 (Interceptor) end");
-	}
 	@Test(expected = ClassCastException.class)
 	public void test9() {
 		String[] array = msg.split(" +");
 		final List<String> list = Arrays.asList(array);
-		Test2<List<String>> targetClass;
 
 		Print.println();
 		Print.println(">>>> test9: InterceptorのproxyクラスはInterfaceで受けないと例外が発生する");
-		targetClass = Interceptor.getProxyInstance(new Test2<List<String>>()); // この記述をなくしたい
+		Test2<List<String>> targetClass = Interceptor.getProxyInstance(new Test2<List<String>>()); // この記述をなくしたい
 		targetClass.p4Jdk18(list);
 		Print.println("<<<< test9 (Interceptor) end");
 	}
