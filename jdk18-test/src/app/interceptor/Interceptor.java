@@ -35,26 +35,29 @@ public class Interceptor implements InvocationHandler {
 
 	private void enter(Method method, Object[] args) {
 
-		// 以下、MethodAnnotationアノテーションがついているメソッドは、処理を追加する
 		Print.println("start AOP: " + method.getName());
 
-		// MethodAnnotationアノテーションがついていないメソッドは、追加処理せず、終了。
 		Arrays.stream(method.getAnnotations()).forEach(Print::println);
-		// 実装クラス側ではなく、interface側のメソッドにAnnotationを付加する
 
+		// MethodAnnotationアノテーションがついていないメソッドは、追加処理せずreturnする
+		// ちなみに、Annotationは、実装クラスではなくinterfaceのメソッドに付加する => InterceptorはgetInterface()しか用意していない
 		// "Stream" call chains should be simplified when possible 
 		if (Arrays.stream(method.getAnnotations()).noneMatch(p -> p instanceof MethodAnnotation)) {
 			return;
 		}
 
+		// 追加処理：
 		// 引数の一覧を作成
+		/*
 		StringBuilder sb = new StringBuilder();
 		if (args != null) {
 			Arrays.stream(args).forEach(arg -> sb.append(arg.toString()).append(" "));
 		}
 		// メソッド名と引数を出力
-		Print.println("source method:" + method.getName() + ", param:" + sb.toString());
-		// 実際に実施し、結果を保存する
+		Print.println("追加処理: method:[" + method.getName() + "] param:[" + sb.toString() + "]");
+		 */
+		// 配列の要素一覧はListに変換すれば実現できる
+		Print.println("呼出元 method:[" + method.getName() + "] param:" + Arrays.asList(args));
 	}
 
 	private void leave(Method method, Object result) {

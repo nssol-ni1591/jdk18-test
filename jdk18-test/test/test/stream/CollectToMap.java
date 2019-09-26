@@ -30,9 +30,18 @@ public class CollectToMap {
 	private BinaryOperator<List<String>> mergeList =
 			(left, right) -> Stream.of(left, right).flatMap(List::stream).collect(Collectors.toList());
 
+	/*
+	Collectors.toMap(第1引数、第2引数、第3引数、第4引数、第5引数)
+		第1引数（必須）：キー
+		第2引数（必須）：値
+		第3引数：同一キーが存在した場合の処理。引数は値が2つ
+		第4引数：使用するMapクラスを指定したい場合（例：HashMap::new）
+	*/
+
 	@Test
 	public void test1() {
-		System.out.println("----文字列の1文字目をキーとしたMapを生成----");
+		System.out.println();
+		System.out.println("test1: ----文字列の1文字目をキーとしたMapを生成----");
 		Map<String, List<String>> map = Stream.of(array)
 				.collect(Collectors.toMap(
 						new Function<String, String>() {
@@ -64,7 +73,8 @@ public class CollectToMap {
 	}
 	@Test
 	public void test2() {
-		System.out.println("----文字列の1文字目をキーとしたMapを生成----");
+		System.out.println();
+		System.out.println("test2: ----文字列の1文字目をキーとしたMapを生成----");
 		Map<String, List<String>> map = Stream.of(array)
 				.collect(Collectors.toMap(
 						t -> t.substring(0, 1)
@@ -82,7 +92,8 @@ public class CollectToMap {
 	}
 	@Test
 	public void test3() {
-		System.out.println("----文字列の1文字目をキーとしたMapを生成----");
+		System.out.println();
+		System.out.println("test3: ----文字列の1文字目をキーとしたMapを生成----");
 		Map<String, List<String>> map = Stream.of(array)
 				.collect(Collectors.toMap(
 						t -> t.substring(0, 1)
@@ -93,7 +104,8 @@ public class CollectToMap {
 	}
 	@Test
 	public void test4() {
-		System.out.println("----文字列の1文字目をキー、2つ目のキーとして、文字数を設定したMapを生成するにはどうする？----");
+		System.out.println();
+		System.out.println("test4: ----文字列の1文字目をキー、2つ目のキーとして、文字数を設定したMapを生成するにはどうする？----");
 		Map<String, Map<Integer, List<String>>> map = Stream.of(array)
 				.collect(Collectors.toMap(
 						t -> t.substring(0, 1)
@@ -158,9 +170,11 @@ public class CollectToMap {
 						));
 		map.entrySet().forEach(System.out::println);
 	}
+
 	@Test
 	public void test5() {
-		System.out.println("----文字列の1文字目をキー、2つ目のキーとして、文字数を設定したMapを生成するにはどうする？----");
+		System.out.println();
+		System.out.println("test5: ----文字列の1文字目をキー、2つ目のキーとして、文字数を設定したMapを生成するにはどうする？----");
 		Map<String, Map<Integer, List<String>>> map = Stream.of(array)
 				.collect(Collectors.toMap(
 						t -> t.substring(0, 1)
@@ -175,9 +189,29 @@ public class CollectToMap {
 								t.merge(ukey, uval, mergeList));	// メソッド参照
 							return t;
 						}
+//						, HashMap<String, Map<Integer, List<String>>>::new
 						));
 		map.entrySet().forEach(System.out::println);
 	}
+	@Test
+	public void test6() {
+		System.out.println();
+		System.out.println("test6: ----文字列の1文字目をキー、2つ目のキーとして、文字数を設定したMapを生成するにはどうする？----");
+		Map<String, Map<Integer, List<String>>> map = Stream.of(array)
+				// use jdk9 api
+				.collect(Collectors.toMap(
+						t -> t.substring(0, 1)
+						, t -> Map.of(t.length(), List.of(t))
+						, (t, u) -> {
+							u.forEach((ukey, uval) -> 
+								t.merge(ukey, uval, mergeList));	// メソッド参照
+							return t;
+						}
+						));
+		map.entrySet().forEach(System.out::println);
+	}
+
+/*
 	@Test
 	public void test6() {
 		System.out.println("----文字列の1文字目をキー、2つ目のキーとして文字数、3つめのキーとして要素数を設定したMapを生成するにはどうする？----");
@@ -186,7 +220,7 @@ public class CollectToMap {
 				.collect(Collectors.toMap(
 						t -> t.substring(0, 1)
 						, t -> {
-							return new HashMap<>(
+							return new HashMap<> (
 									Collections.singletonMap(
 											Integer.valueOf(t.length())
 											, new HashMap<>(Collections.singletonMap(
@@ -222,4 +256,5 @@ public class CollectToMap {
 						));
 		map.entrySet().forEach(System.out::println);
 	}
+	*/
 }
